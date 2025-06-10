@@ -1,6 +1,6 @@
 ---
 title: "README"
-format: html
+output-file: README.md
 ---
 
 R labs for students in Professor Nordmeyer's PSYS2012 course. 
