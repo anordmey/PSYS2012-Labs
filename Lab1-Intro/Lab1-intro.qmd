@@ -1,0 +1,21 @@
+---
+title: "Lab 1: Introduction to Statistics in R"
+format: live-html
+engine: knitr
+---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
+
+## Test
+
+This is really just a test!
+
+```{webr}
+1 + 1
+```
+
+```{webr}
+data(cars)
+
+head(cars)
+```
