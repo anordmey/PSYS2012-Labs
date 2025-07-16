@@ -1,21 +1,454 @@
 ---
-title: "Lab 1: Introduction to Statistics in R"
+title: "R Lab: Introduction to Statistics in R"
 format: live-html
+resources:
+  - data
+toc: true
 engine: knitr
+
 ---
 
 {{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
-## Test
+## Welcome!
 
-This is really just a test!
+Welcome to the first R Lab for PSYS 2012!
+
+R is a programming language that is widely used for statistical analysis in the field of psychology. One of the great things about R is that it is free and open-source, so anyone can download R and use it for free in their research. In these labs, you will learn some very basic R code that is useful for doing statistical analyses of psychological research, and most importantly, you will learn how to interpret the output of these analyses and write them up in APA format.
+
+The primary goal of these labs is to teach you how to *interpret* and *report* statistical analyses, not make you an expert in R. In fact, to complete these labs, you won't even need to download R to your computer! You'll be able to complete all of the analyses necessary within the lab website - all you need is internet access. There are a lot of important components to doing real research in R that we *not* be covering in this course, such as:
+
+-   downloading/installing R and RStudio on your computer
+
+-   opening a dataset in R
+
+-   cleaning up data for analysis
+
+-   installing and loading R packages
+
+All of the above are tasks that you need to be familiar with to do your own research in R. In this course I will do most of this "pre-processing" work for you, so that you can focus on learning some important statistical functions of R - and most importantly, learning how to interpret the output that R gives you.
+
+If you are interested in learning more about R (for your own work or research, or to prepare you for future advanced courses), I recommend the following (free!) resources:
+
+-   Learning Statistics with R by Danielle Navarro (<https://learningstatisticswithr.com/>)
+
+-   R for Data Science by Hadley Wickham, Mine Cetinkaya-Rundel, & Garrett Grolemund (<https://r4ds.hadley.nz/>)
+
+-   OpenIntro Statistics which has some great statistics/R tutorials created by Adam Gilbert (scroll to the bottom where it says OS4 Companion Notebook)
+
+I have used all of the above resources in the creation of these labs, and they are all excellent tools to learn more about R (and statistics/data science) beyond the scope of this course. I have also adapted some parts of these labs from R labs created by Professor Matthew Price at UVM.
+
+## How these labs will work
+
+Throughout these labs, you will see "code blocks" like the one below, containing a small amount of R code. These code blocks are "executable", meaning you can click the button that says "run code" and below the code block you will see the output of this code block. For example, if you click "run code" below, you'll see the output of the calculation 1 + 1. 
+
+Note that R will ignore any line that starts with a `#` - these are called "comments" and are just notes to the reader to help you understand the R code.
 
 ```{webr}
+# Click "run code" to see the output!
 1 + 1
 ```
 
-```{webr}
-data(cars)
+::: callout-caution
+If the "run code" button ever doesn't work for you, give your computer a few minutes to finish loading the page. You will need an internet connection to access these labs.
+:::
 
-head(cars)
+The above code block demonstrates one of the most basic things you can do with R: treat it like a simple calculator. If you click in the code block above, you can change the R code to be whatever you want! Do this right now, changing the R code to evaluate 1 + 2 (you'll need to click "run code" again to get the new output).
+
+For each R Lab this semester, you will work through the code blocks on a web page like this one. You can work on the R code on your own, or with peers from class. As you work through the lab, questions will appear in blocks like this:
+
+::: {.callout-tip title="Questions will appear like this!"}
+Questions that you need to answer will appear in a block like this! Some questions will ask you to copy/paste R code that you used to answer a question, and others will just ask you to report or interpret the code output. 
+
+**You will write the answers to all questions in a *separate* word document!**
+
+All questions will include a rubric so you know what information to include.
+
+*Rubric example:*
+
+-   This is not a real rubric but is what a rubric will look like!
+:::
+
+Type your answers to these questions in a separate word document and upload that document to Brightspace for evaluation.
+
+## Lab: Introduction to R
+
+For each question in this lab, you will learn about and practice a basic function of R. Some questions will ask you to copy/paste the R code you used to answer the question, so that we can see that you have practiced using R. Remember to look out for the green blocks identifying questions that you must answer in a separate document!
+
+::: callout-note
+If you have experience with R or another programming language, this will probably be pretty basic for you - we're just covering basics here so that in later labs we can get into more interesting statistical content!
+
+If you have **not** ever used R or any other programming language before, and you find this intimidating, just go slow and feel free to get help from a friend or a TA! The more you practice R, the easier it will get. Remember, the goal of these labs is to teach you how to interpret statistical output, not become an R expert. Many of the questions will include hints and solutions for the R code if you need them.
+:::
+
+### Question 1: Basic operations and functions in R
+
+You can do all of the basic math operations in R with the following symbols:
+
+-   `*` is the operator for multiplication
+
+-   `/` is the operator for division
+
+-   `-` is the operator for subtraction
+
+-   `+` is the operator for addition
+
+-   `^` is the operator for exponent
+
+You can do all sorts of more complex calculations in R, and R will follow order of operations for you. Try it below by clicking "run code" in the code block below. Then play around with this by seeing how the answer changes if you remove the parentheses and then click "run code" again. 
+
+```{webr}
+# Click "run code" to see how R evaluates the expression below. 
+# What happens if you remove the parentheses?
+
+(5 + 2)^2 / (8-4) * 4
 ```
+
+To do more complex operations, R uses functions. Many basic functions are built into R, such as `sqrt()`, which calculates the square root of a number, or `mean()`, which calculates the mean of a vector (i.e. list) of numbers. Other functions are part of separate "packages" that members of the R community have created and shared, which you can install and load.
+
+::: callout-note
+For these labs, I will pre-load any packages you need, but I will always make note of what packages we use so that you know where to find these functions if you go on to use R in the future.
+:::
+
+When using a function (we sometimes say "calling a function"), the information you place inside the parentheses are called **arguments**. The function `sqrt()` requires one argument, the value that you want to take the square root of. In the code block below, see how the function `sqrt()` can be used to evaluate $\sqrt{196}$. Play around with this by changing the number in parentheses and seeing how the output changes. 
+
+```{webr}
+# Try it yourself:
+# See what happens if you change 196 to 144 and click "run code".
+sqrt(196)
+```
+
+
+
+::: {.callout-tip title="Question 1: Basic mathematical operations"}
+In the code block below, use the operations listed above to evaluate the following expression: 
+
+$\frac{ (56-27)^2}{\sqrt(7)}$
+
+Try completing this on your own  in the code block below. 
+
+*Rubric for Question 1 (2 points total):*
+
+-   1 pt: Copy the R code that you used to answer the expression above.
+-   1 pt: Report the answer to the expression above.
+:::
+
+::: callout-note
+If you get stuck, click the "hint" button to get a hint (the hint will appear below the code block). If you are still stuck after viewing the hint, a "solution" button will appear which will give you code to copy/paste into the code block.
+:::
+
+
+```{webr}
+#| exercise: ex_1
+ 
+# Enter your R code here. 
+```
+
+:::: {.hint exercise="ex_1"}
+::: {.callout-note collapse="false"}
+## Hint
+
+This is a fraction, so you will need to use the division symbol. Try filling in the blanks in the example below. Refer to the list of operators above if you need help and remember the function for square root is sqrt(). 
+
+``` r
+______ / ______
+```
+
+:::
+::::
+
+:::: {.solution exercise="ex_1"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy and paste the code below into the code block. Remember to press the "run code" button to get the answer!
+
+``` r
+(56-27)^2 / sqrt(7)
+```
+:::
+::::
+
+
+::: callout-important
+It's good to be aware of what will happen if you break something in R! If you made any mistakes in the previous question, you may have noticed an error message. Don't panic! See if you can identify where you went wrong, and if you really get stuck you can always start over and try again.
+
+If you *really* break something you can get caught in an "infinite loop", but these labs are set up to cancel any really broken R code after 30 seconds- you'll get an error that says `Error: reached elapsed time limit`. So don't be afraid to play around and make mistakes - you can't actually break anything here.
+
+If you get an error when working on these labs, here are some things to check in your code:
+
+-   Spelling counts! In this example we're just using numbers but later we will assign names to variables and objects. Check to make sure you spelled your object or function names correctly.
+-   Capitalization counts! A variable named MyVariable is different from a variable named myVariable.
+-   Check punctuation carefully. R (really all programming languages) hates open parentheses and will throw an error like this if you forget to close your parentheses. When we get into more advanced labs, keep an eye out for missing (or extra) `"`, ,`and`+\` which can be important in many functions.
+-   Above all, don't panic if you get an error message. In these labs, you can always click "start over" to bring the code block back to how you started.
+:::
+
+### Question 2: Defining objects/variables in R
+
+One very useful feature in R is the ability to store information in an *object* (sometimes called a *variable*, but I'm going to avoid that terminology because we use the word variable to refer to specific things in statistics). You can give objects almost any name in R, as long as it starts with a letter (not a symbol or number). You can then assign information to your object using the symbol `->`, then typing the information you want that object to store. 
+
+You can store all kinds of information in objects. In the example code block below, you can see three objects below. The first object, `foo`, holds a number and the second, `bar`, holds a text string (which R sometimes calls `chr`, for "character" because the text string contains "characters" instead of numbers). The third, `baz`, holds a list (also called a *vector*) of integers, which is created using the function `c()` (the "c" stands for "concatenate" which means "link together in a chain or series").
+
+You can type the name of each object to get R to print out the contents of that object. In the code block below, clicking "Run code" will print the contents of `foo`. Change `foo` to `bar` or `baz` to see how the output changes. 
+
+```{webr}
+#| autorun: true
+foo <- 3
+bar <- "three"
+baz <- c(2, 19, 10, 9, 3, 14, 13, 15, 9, 6, 14, 3)
+
+#Change `foo` below to `bar` or `baz` to see how the output changes.
+foo
+```
+
+Notice that `foo` holds the *number* 3, and `bar` holds the *word* "three". You can perform mathematical operations on numeric objects (including lists of numbers), but not text strings. Try running the code block below, which asks R to compute `foo + 1`. What happens if you change this to `bar + 1` instead? What happens if you change it to `baz + 1`?
+
+
+```{webr}
+# Click "run code" to get the output of foo + 1
+# What happens if you change this to bar + 1? 
+# What happens if you change this to baz + 1?
+
+foo + 1
+```
+
+You can also create lists of numbers and store these in objects. The function `c()`, which stands for *concatenate*, will create a list (also called a *vector*) of numbers. You can then perform operations on this entire list. Practice this for question 2 below. As in Question 1, you can use the "hint" and "solution" buttons if you need help. 
+
+::: {.callout-tip title="Question 2: Operations on objects"}
+Create an object called `baz2` that squares the object `baz` created in my example above.
+
+Note that you don't have to re-write the object `baz` here - if you type `baz` into the code block below, R will recognize it from my example above (in technical terms, all of my example code blocks exist in the same "Global Environment" for this lab, so you can refer to any of the objects I create in my examples in your exercise code blocks). 
+
+Try completing this on your own  in the code block below. Remember you can click "Show Hint" and a hint will appear below the code block; if you are still stuck click "Show Solution" to see the solution.
+
+*Rubric for Question 2 (2 points total):*
+
+-   1 pt: Copy the R code that you used to answer the expression above.
+-   1 pt: Report the output of the object `a` (you can get the output by just typing `a` at the bottom of the code block - R will print out what is stored in that object.)
+:::
+
+
+```{webr}
+#| exercise: ex_2
+# Type your R code below 
+# Create an object that squares all of the numbers in the object baz.
+
+
+```
+
+:::: {.hint exercise="ex_2"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Fill in the partial code below, replacing `_` with the operator for exponents (see previous section if you need a reminder!).
+
+Note that writing `baz2` beneath your line of code will print out the list of squared numbers. You can always "print" the contents of an object by simply typing it's name into an R code block. 
+
+``` r
+baz2 <- baz_2
+baz2
+```
+
+Remember to press the "run code" button to get the answer!
+
+
+:::
+::::
+
+:::: {.solution exercise="ex_2"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. 
+
+``` r
+baz2 <- baz^2
+baz2
+```
+
+Remember to press the "run code" button to get the answer!
+:::
+::::
+
+
+### Question 3: Working with data in R
+
+For our last lesson in this lab we will learn about how to work with *dataframes* instead of just single numbers or vectors. A *dataframe* in R is a set of vectors (which, in a dataframe, we will also call *variables*) in columns, like what you might create in a spreadsheet. You can create a dataframe by hand by creating several vectors of the same length, and then combining them into a dataframe using the function `data.frame()`. 
+
+For example, imagine I have data from nine students - I know their age, their gender identity, and their score on the first exam. In the code block below I combine the three vectors and create a data frame called `student_data`. When we view `student_data` you will see that it prints out something that looks a little like a spreadsheet, with each row representing an individual student and each column representing a variable. 
+
+```{webr}
+#| autorun: true
+age <- c(18, 19, 22, 20, 20, 21, 19, 20, 21)
+gender <- c("female", "male", "female", "male", "female", "female", "male", "male", "female")
+score <- c(84, 76, 90, 94, 90, 77, 81, 84, 88)
+
+student_data <- data.frame(age, gender, score)
+student_data
+
+```
+
+You can examine the "structure" of a data frame using the function `str()`. If you run the code block below, you will see in the output a lot of good information about the dataframe `student_data`. You can see that the data frame contains three variables, each with 7 "observations". The variables `age` and `scores` contain `numeric` data. The variable `gender` contains `character` data. Remember from what we learned in the previous section that we can perform mathematical operations on numeric data, but not character data.
+
+If we think about these variables in terms of the scales of measurement that we learned in the first week of class, we know that `age` and `scores` are both "ratio" scales, and `gender` is a nominal scale. 
+
+```{webr}
+str(student_data)
+```
+
+You can also examine just one specific variable from a dataframe, or perform operations on a variable like we did in Question 2. To identify a specific variable from a data frame, use the `$` operator as in the example below. Change the example below to view the `gender` variable and the `score` variable. 
+
+```{webr}
+# Try changing the code below
+# What happens if you change age to gender or score?
+student_data$age
+```
+
+Because `age` and `score` are ratio scales, we can perform operations on these variables. Here are a few functions that are very common and useful when analyzing descriptive statistics:
+
+- `min()` will give the minimum value of a numeric vector
+- `max()` will give the maximum value of a numeric vector
+- `mean()` will give you the mean of a variable
+- `median()` will give you the median of a variable
+- `sd()` will give you the *sample* standard deviation of a variable (there is not a built-in function for population standard deviation because in practice this is not used much)
+
+In the code block below, click "Run Code" to find the mean age of students in this dataset. Can you change the code to find the mean test scores? Can you change it again to find the standard deviation for test scores?
+
+```{webr}
+# Click Run Code to see the mean age of students.
+# Then try changing the code to see the mean test score.
+# Then try changing the code to see the std. dev. of test scores.
+
+mean(student_data$age)
+```
+
+The last thing we will practice in this lab is how to create simple simple histograms of variables. Run the cdoe block below to create a histogram of scores using the function `hist()`. Note that `hist()` can only be used on numeric data (there are ways to create frequency plots of non-numeric data, but `hist()` isn't the best way to do this). You can customize `hist()` more than this (e.g. by specifying exactly where to put the number breaks on the x-axis), but for now we'll just keep things simple by letting R choose the defaults for us.
+
+```{webr}
+hist(student_data$score)
+```
+
+For Question 3, we will work with a larger dataset that I have loaded in using the function `read.csv()`. There are 108 participants in this dataframe, so below I use the function `head()` to just show you the first six rows so that you don't have to scroll through a huge table of data!
+
+This dataframe contains the following variables: 
+
+* `id` - this is just an "identification" variable that gives each participant a unique identifier
+* `age` - person's age in years
+* `gender_identity` - the person's self-reported gender identity (female, male, non-binary)
+* `math_experience` - the person's math experience, based on the number of college-level math courses they have taken (0-2 is low, 3-6 is medium, 7+ is high)
+* `math_anxiety` - a score ranging from 1-5, with higher values indicating higher levels of math anxiety
+
+```{webr}
+#| edit: false
+math_anxiety <- read.csv("data/math_anxiety.csv")
+
+head(math_anxiety)
+```
+
+Based on the information above, answer Question 3a below (remember to type into a separate document). 
+
+::: {.callout-tip title="Question 3a: Scales of Measurement practice"}
+
+What are the scales of measurement (nominal, ordinal, interval, or ratio) for each of the following variables in this dataset: `age`, `gender_identity`, `math_experience`, `math_anxiety`. 
+
+This question does not require R, it's just good practice to review scales of measurement!
+
+*Rubric for Question 3a (2 points total):*
+
+-   .5 points for each scale of measurement that is correctly identified.
+
+:::
+
+
+
+
+::: {.callout-tip title="Question 3b: Operations on variables"}
+For Question 3b, use the code block below to answer the following questions. For this question you don't need to copy your R code, you just need to report the output!
+
+What is the mean age for participants in the math_anxiety data? Report your answer using a *complete sentence* (e.g., "The mean age of participants is _____.")
+
+*Rubric for Question 3b (2 points total):*
+
+-   1 pt: Correctly report the mean age of participants.
+-   1 pt: Professionalism - write your answer as a complete sentence.
+:::
+
+
+```{webr}
+#| exercise: ex_3
+# Type your R code below 
+# Calculate the mean age of participants in the math_anxiety data
+
+
+```
+
+:::: {.hint exercise="ex_3"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Remember, the function to calculate mean is `mean()` and the operator to identify a specific variable in a dataset is `$`. 
+
+If you are stuck, review the student_data example above. If you are getting an error, review your work for typos! Remember that capitalization matters in R!
+
+:::
+::::
+
+:::: {.solution exercise="ex_3"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. 
+
+``` r
+mean(math_anxiety$age)
+```
+
+Remember to press the "run code" button to get the answer!
+:::
+::::
+
+::: {.callout-tip title="Question 3c: Histograms of data"}
+For Question 3c, use the code block below to create a histogram of the math anxiety scores. For this question you don't need to copy your R code, you just need to copy/paste your histogram into your answer key!
+
+*Rubric for Question 3c (2 points total):*
+
+-   1 pt: Present a histogram that shows the frequency of different math anxiety scores. Your histogram should be neatly copy/pasted (if you take a screenshot, crop the image so that only the histogram appears and resize it to be legible in your final document) - if it is illegible or sloppy .5 points will be deducted. 
+-   1 pt: Based on your histogram, what appears to be the most common math anxiety score in this data set?
+:::
+
+
+```{webr}
+#| exercise: ex_3c
+# Type your R code below 
+# Create a histogram of math anxiety scores
+
+
+```
+
+:::: {.hint exercise="ex_3c"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Remember, the function to create a histogram is `hist()` and the operator to identify a specific variable in a dataset is `$`. 
+
+If you are stuck, review the student_data example above. If you are getting an error, review your work for typos! Remember that capitalization matters in R!
+
+:::
+::::
+
+:::: {.solution exercise="ex_3c"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. 
+
+``` r
+hist(math_anxiety$math_anxiety)
+```
+
+Remember to press the "run code" button to get the answer!
+:::
+::::
+
+
+
