@@ -322,7 +322,7 @@ In the code block below, click "Run Code" to find the mean age of students in th
 mean(student_data$age)
 ```
 
-The last thing we will practice in this lab is how to create simple simple histograms of variables. Run the cdoe block below to create a histogram of scores using the function `hist()`. Note that `hist()` can only be used on numeric data (there are ways to create frequency plots of non-numeric data, but `hist()` isn't the best way to do this). You can customize `hist()` more than this (e.g. by specifying exactly where to put the number breaks on the x-axis), but for now we'll just keep things simple by letting R choose the defaults for us.
+The last thing we will practice in this lab is how to create simple histograms of variables. Run the code block below to create a histogram of scores using the function `hist()`. Note that `hist()` can only be used on numeric data (there are ways to create frequency plots of non-numeric data, but `hist()` isn't the best way to do this). You can customize `hist()` more than this (e.g. by specifying exactly where to put the number breaks on the x-axis), but for now we'll just keep things simple by letting R choose the defaults for us.
 
 ```{webr}
 hist(student_data$score)
