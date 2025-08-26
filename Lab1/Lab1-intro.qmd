@@ -224,7 +224,7 @@ Try completing this on your own  in the code block below. Remember you can click
 *Rubric for Question 2 (2 points total):*
 
 -   1 pt: Copy the R code that you used to answer the expression above.
--   1 pt: Report the output of the object `a` (you can get the output by just typing `a` at the bottom of the code block - R will print out what is stored in that object.)
+-   1 pt: Report the output of the object `baz2` (you can get the output by just typing `baz2` at the bottom of the code block - R will print out what is stored in that object, and you can copy and paste the entire output into your response document.)
 :::
 
 
@@ -365,12 +365,12 @@ This question does not require R, it's just good practice to review scales of me
 ::: {.callout-tip title="Question 3b: Operations on variables"}
 For Question 3b, use the code block below to answer the following questions. For this question you don't need to copy your R code, you just need to report the output!
 
-What is the mean age for participants in the math_anxiety data? Report your answer using a *complete sentence* (e.g., "The mean age of participants is _____.")
+What is the mean age for participants in the math_anxiety data? Report your answer using a *complete sentence* including units (e.g., "The mean age of participants is _____ years.")
 
 *Rubric for Question 3b (2 points total):*
 
 -   1 pt: Correctly report the mean age of participants.
--   1 pt: Professionalism - write your answer as a complete sentence.
+-   1 pt: Professionalism - write your answer as a complete sentence, including the units of the answer.
 :::
 
 
