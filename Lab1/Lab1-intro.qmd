@@ -185,7 +185,7 @@ If you get an error when working on these labs, here are some things to check in
 
 ### Question 2: Defining objects/variables in R
 
-One very useful feature in R is the ability to store information in an *object* (sometimes called a *variable*, but I'm going to avoid that terminology because we use the word variable to refer to specific things in statistics). You can give objects almost any name in R, as long as it starts with a letter (not a symbol or number). You can then assign information to your object using the symbol `->`, then typing the information you want that object to store. 
+One very useful feature in R is the ability to store information in an *object* (sometimes called a *variable*, but I'm going to avoid that terminology because we use the word variable to refer to specific things in statistics). You can give objects almost any name in R, as long as it starts with a letter (not a symbol or number). You can then assign information to your object using the symbol `<-`, then typing the information you want that object to store. 
 
 You can store all kinds of information in objects. In the example code block below, you can see three objects below. The first object, `foo`, holds a number and the second, `bar`, holds a text string (which R sometimes calls `chr`, for "character" because the text string contains "characters" instead of numbers). The third, `baz`, holds a list (also called a *vector*) of integers, which is created using the function `c()` (the "c" stands for "concatenate" which means "link together in a chain or series").
 
