@@ -1,0 +1,578 @@
+---
+title: "HW #4: R Lab - Introduction to Hypothesis Testing"
+format: live-html
+resources:
+  - data
+webr:
+  packages:
+    - dplyr
+toc: true
+engine: knitr
+
+---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
+
+## R Lab #2 (Homework #4)
+
+Welcome to the second R Lab for PSYS 2012!
+
+In this lab you will analyze real data from a study of coma patients. The study that these data came from explored “cognitive recovery” in coma patients - that is, the IQ of coma patients as they recovered from the comas. The data are from the paper cited below, which I retrieved from an R package called `car`: 
+
+Wong, P. P., Monette, G., & Weiner, N. I. (2001). Mathematical models of cognitive recovery. Brain injury, 15(6), 519-530.
+
+There are two goals of this lab: 
+
+- To practice some basic operations and functions in R (review from Lab 1)
+- To review some of the concepts from Week 5 of class and practice writing up results of hypothesis tests in APA format
+
+In the first half of this lab, I will show you how to analyze one half of the data (IQ of patients who were in a coma for less than 7 days). Then for the homework you will replicate the analyses with the other half of the data (for patients who were in a coma for 7 days or longer). 
+
+::: {.callout-tip title="Remember: Questions will appear like this!"}
+As a reminder, throughout this lab questions that you need to answer will appear in a block like this! 
+
+**You will write the answers to all questions in a *separate* word document!**
+
+All questions will include a rubric so you know what information to include.
+
+*Rubric example:*
+
+-   This is not a real rubric but is what a rubric will look like! 
+:::
+
+Type your answers to these questions in a separate word document and upload that document to Brightspace for evaluation. There is an "answer template" document attached to the Brightspace assignment, like last time.
+
+## Lab 2: About the data
+
+As mentioned above, the data in this lab are real data that come from a study of patients who recovered from a coma (Wong et al., 2001). In the original study, the researchers took patients who were in a coma (for a variety of reasons) and measured their IQ after they recovered from their coma. Some patients had their IQ measured at multiple points; here I am only showing you their maximum Verbal IQ scores (peak_viq). I have split the data into two datasets: the first, short_coma, is a dataset of patients who were in a coma for less than 7 days. The second, long_coma, is a dataset of patients who were in a coma for 7 days or more.
+
+Here's an overview of the variables in the dataset: 
+
+- **id**: The participant's ID number
+
+- **sex**: Participant's biological sex
+
+- **age**: Participant's age in years
+
+- **peak_viq**: The highest score the patient received on their verbal IQ tests.
+
+
+You will explore whether the patients appear to have IQs that are different from the general population. Remember, for the general population, IQ scores are normally distributed with $\mu = 100$ and $\sigma = 15$. We will practice R skills by calculating the Z-score, effect size (Cohen's d), and confidence interval for the sample - first I will show you how to do this with the short_coma sample as a demonstration and then you will practice doing the same thing with the long_ coma data_coma sample for the homework. 
+
+## Reviewing operations and functions in R
+
+We're going to start by loading the data we will use to practice. I'm also loading some R libraries to get some functions we'll use in this lab. You don't need to know how to do this, but you can see the code below if you are curious. 
+
+```{webr}
+#| edit: false
+#| envir: demo
+short_coma <- read.csv("data/short_coma.csv")
+head(short_coma)
+``` 
+Remember that the function `head()` only prints the first six rows of the data, so the data above iare just a "peek" at the data, not the whole dataset!
+
+The z-test is a nice way to practice reviewing basic R syntax, because unlike future statistical tests that we learn in R labs, there isn't a built-in function for doing a z-test in R. So instead we will use the formula to calculate the z-score directly. 
+
+Remember that these are the basic mathematical operations in R: 
+
+-   `*` is the operator for multiplication
+
+-   `/` is the operator for division
+
+-   `-` is the operator for subtraction
+
+-   `+` is the operator for addition
+
+-   `^` is the operator for exponent
+
+In this lab you'll also practice using these basic functions in R: 
+
+- `length()` tells you the length of a vector (i.e. column in a dataframe), allowing you to get $N$ if your dataset represents one participant per row (which this one is). 
+
+- `sqrt()` calculates the square root of a number.
+
+- `mean()` calculates the mean of a list or vector (i.e. column in a dataframe).
+
+### Demo: Calculating Z-scores for short coma patients
+
+Remember, the formula for a z-score for a sample mean is: $Z = \frac{(M – \mu)}{\sigma_M}$, where $\sigma_M = \frac{\sigma}{\sqrt N}$. 
+
+Let's start by finding out what the mean IQ is for this sample! Remember that, as described above, each participant's maximum IQ score is recorded in a variable called `peak_viq`. We can use the function `mean()` to calculate the sample mean, and we'll save it as an object `M` so that we can use it later! See how I do this below. Remember that lines that start with the `#` symbol are comments, written to help you understand each line of code.
+
+```{webr}
+#| envir: demo
+#| autorun: true
+# First let's calculate sample mean using the function mean() 
+# Remember that the $ operator selects a column (i.e. a variable) from a dataframe, so e.g. x$y would mean "select column y from dataset x"
+# Here I'm asking R to identify mean of the "peak_viq" column of the "short_coma" dataset.
+M <- mean(short_coma$peak_viq)
+M
+```
+
+The output above tells us the sample mean for short coma patients, and we've saved `M` as an object to use later.
+
+Next we need to calculate the standard error for our sample: $\sigma_M = \frac{\sigma}{\sqrt N}$
+
+We know the population standard deviation of IQ scores is $\sigma = 15$. We'll use the function `length()` to identify our sample size, $N$. `length()` will tell us the "length" of a column of data, and since in this dataframe each row represents an individual person, we can use this to calculate $N$. 
+See how I do this below. 
+
+```{webr}
+#| envir: demo
+#| autorun: true
+# let's calculate N using the function length(). We are asking R to identify the number of rows in the peak_viq variable of the short_coma data.
+N <- length(short_coma$peak_viq)
+N
+```
+The output above tells us the number of participants in the short_coma dataset. Notice that I saved `N` as an object, so we can use this in our calculations later. 
+
+Now we'll use $N$ and $\sigma = 15$ to calculate the standard error. You'll also need to use the function `sqrt()` to take the square root of N! 
+See how I do it below. Again I am saving `se` here as an object to use later!
+
+```{webr}
+#| envir: demo
+#| autorun: true
+se <- 15 / sqrt(N)
+se
+```
+
+Now that we have the standard error (saved as the object `se`) we can calculate the Z-score for our sample mean: $Z = \frac{(M – \mu)}{\sigma_M}$
+
+- We know that $M$ is saved as an object `M`, calculated above.
+- We know that $\mu = 100$ (given by the problem)
+- We know that ${\sigma_M}$ is saved as an object, `se`, calculated above.
+
+Let's put this all together to calculate the Z-score for short coma patients! Click "Run Code" to see the Z-score. 
+
+```{webr}
+#| envir: demo
+(M - 100) / se
+```
+
+Now you have a Z-score for your sample of patients who experienced short comas! Remember that we want to know if these patients differ significantly from the general population. Assuming we are doing a two-tailed test with $\alpha = .05$, we would **reject the null hypothesis**, because our Z-score falls (just barely!) in the below -1.96. 
+
+### Demo: Calculating effect size for short coma patients
+Next we'll practice calculating effect size by calculating Cohen's d for the difference between short coma patient IQs and the general population. 
+
+The formula for Cohen's d is $d = \frac{M - \mu}{\sigma}$. 
+
+We have all of the components that we need to calculate Cohen's d: 
+
+- We know that $M$ is saved as an object `M`, calculated above.
+- We know that $\mu = 100$ (given by the problem)
+- We know that ${\sigma = 15}$ (given by the problem)
+
+You can put this all together to calculate Cohen's d for short coma patients (click "Run Code" to see the effect size!)
+
+```{webr}
+#| envir: demo
+(M - 100) / 15
+```
+
+### Demo: Calculating confidence interval for short coma patients
+
+Next we'll practice calculating the confidence interval for our sample of short coma patient IQs. 
+
+Remember we have to calculate two values for confidence intervals: The lower bound, and the upper bound. 
+
+The formula for the lower bound is $M - 1.96\times\sigma_M$.
+The formula for the upper bound is $M + 1.96\times\sigma_M$.
+
+We already have all the components we need to calculate confidence intervals!
+
+- We know that $M$ is saved as an object `M`, calculated above.
+- We know that ${\sigma_M}$ is saved as an object, `se`, calculated above.
+
+See below for code to calculate the lower and upper bounds of the 95% Confidence Interval for short coma patient IQs. Notice I save each as an object, and then print both at the end, so the first number you see in the output (when you hit "Run Code") is the lower bound and the second number is the upper bound. 
+
+```{webr}
+#| envir: demo
+lower <- M - 1.96*se
+upper <- M + 1.96*se
+
+lower
+upper
+```
+
+### Demo: Writing up a Z-score test in APA format. 
+
+To write up these results in APA format, write a sentence like this: 
+
+> Patients who experienced short comas (with a duration of less than 7 days) had significantly lower mean IQs (M = 96.99) compared to the general population, Z = -2.00, p < .05, d = -0.20, 95\% CI [94.04, 99.94]. 
+
+## Homework #4: You try it!
+
+Now you will do the same analysis for long coma patients! I've loaded the long_coma patient data below, so make sure you are always looking at the `long_coma` data for this exercise. The variables in this dataset are the same as the data above - the only difference is that these patients were in a coma for **seven days or longer** Remember to look for the green boxes to identify the questions you need to ask and exactly what information we will be looking for when we grade. 
+
+If you get stuck, try looking at what I did with the short_coma patient data above (you'll be doing the same thing just with the `long_coma` data) and remember you can click "Show Hint" and then "Show Solution" if you need help (or if you just want to check your work!). 
+
+```{webr}
+#| edit: false
+# Long coma patients had comas with a duration of 7 days or longer.
+long_coma <- read.csv("data/long_coma.csv")
+head(long_coma)
+``` 
+
+Remember that the function `head()` only shows you the first six rows of the data, so what you see above is just a glimpse of the data, not the entire dataset!
+
+### Question #1: Calculate the z-statistic for long coma patient IQs
+
+For this question, you will follow the same steps as the question above to calculate the z-score for patients with long comas. This question has several steps - you will identify the sample size, sample mean, standard error, and finally Z-score. For each step, to earn full credit you will report both the R code you used as well as the output. 
+
+::: {.callout-tip title="Question 1a: Sample mean"}
+
+What is the mean IQ for long coma patients? Use the code block below to answer this question!
+
+As a reminder, long coma patients are patients with a coma that lasted 7 days or longer and their data can be found in the dataframe `long_data`. The column that records patient IQ is labelled `peak_viq`. See what I did above with the short coma data if you need a hint - just make sure you use the long data in your version!
+
+
+*Rubric for Question 1a (1 point total):*
+
+-   .5 pt: Copy the R code that you used to answer this question.
+-   .5 pt: What is the mean IQ for long coma patients? **Round your answer to two decimal places.**
+
+:::
+
+```{webr}
+#| envir: hw
+#| exercise: ex_1a
+# What is the mean iq for long coma patients? 
+# Hint: You may want to save it as an object, M, to use later!
+
+
+```
+
+:::: {.hint exercise="ex_1a"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Use the function `mean()` here, and identify the variable you want to take the mean of using the `$` operator. 
+You can copy/paste the code I used earlier, just make sure you replace short_coma with the `long_coma` data!
+
+Remember to press the "run code" button to get the answer!
+
+:::
+::::
+
+:::: {.solution exercise="ex_1a"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. 
+
+``` r
+M <- mean(long_coma$peak_viq)
+M
+```
+
+Remember to press the "run code" button to get the answer!
+:::
+::::
+
+
+
+::: {.callout-tip title="Question 1b: Sample size"}
+
+How many participants are in this dataset? Use the code block below to find N!
+
+*Rubric for Question 1b (1 points total):*
+
+-   .5 pt: Copy the R code that you used to answer this question.
+-   .5 pt: How many patients are in the long_data dataset? 
+
+:::
+
+```{webr}
+#| envir: hw
+#| exercise: ex_1b
+# What is N? 
+# Hint: You may want to save it as an object, N, to use later!
+
+
+```
+
+:::: {.hint exercise="ex_1b"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Use the function length() here, and identify the variable you want to take calculate the length of of using the $ operator. 
+You can copy/paste the code I used earlier, just make sure you replace short_coma with the `long_coma` data!
+
+Remember to press the "run code" button to get the answer!
+
+:::
+::::
+
+:::: {.solution exercise="ex_1b"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. 
+
+``` r
+N <- length(long_coma$peak_viq)
+N
+```
+
+Remember to press the "run code" button to get the answer!
+:::
+::::
+
+
+::: {.callout-tip title="Question 1c: Standard Error"}
+
+What is the standard error for this sample of long coma patient IQs? Remember that $\sigma_M = \frac{\sigma}{\sqrt N}$ and the *population* standard deviation for IQ scores is $\sigma = 15$. 
+
+*Rubric for Question 1c (1 point total):*
+
+-   .5 pt: Copy the R code that you used to answer this question.
+-   .5 pt: What is the standard error for this sample of long coma patient IQs? 
+
+:::
+
+```{webr}
+#| envir: hw
+#| exercise: ex_1c
+# What is the standard error for this sample? 
+# Hint: You may want to save it as an object, se, to use later!
+
+
+```
+
+:::: {.hint exercise="ex_1c"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Remember that the formula for standard error is $\sigma_M = \frac{\sigma}{\sqrt N}$. The function for square roots is `sqrt()`. 
+You know $\sigma = 15$ and you calculated $N$ above!
+You can use my earlier code as an example!
+
+Remember to press the "run code" button to get the answer!
+
+:::
+::::
+
+:::: {.solution exercise="ex_1c"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. This will only work if you saved N as an object `N` in the earlier question. If you saved your sample size as an object with a different name, or did not save it as an object, replace `N` with your sample size here!
+
+``` r
+se <- 15 / sqrt(N)
+se
+```
+
+Remember to press the "run code" button to get the answer!
+:::
+::::
+
+
+::: {.callout-tip title="Question 1d: Z-score"}
+
+Put everything together to calculate the Z-score for this sample of long coma patient IQs!
+
+Remember, $Z = \frac{(M – \mu)}{\sigma_M}$.
+
+*Rubric for Question 1d (1 point total):*
+
+-   .5 pt: Copy the R code that you used to answer this question.
+-   .5 pt: What is the Z-score for this sample of long coma patient IQs? 
+
+:::
+
+```{webr}
+#| envir: hw
+#| exercise: ex_1d
+# What is the Z-score for this sample? 
+
+```
+
+:::: {.hint exercise="ex_1d"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Remember that the formula for Z is $\frac{M - \mu}{\sigma_M}$. 
+The population mean is $\mu = 100$ and the mean and standard error were calculated earlier. 
+You can use my earlier code from the short coma demo earlier!
+
+
+Remember to press the "run code" button to get the answer!
+
+:::
+::::
+
+:::: {.solution exercise="ex_1d"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. This will only work if you saved the mean as an object `M` and the standard error as an object `se` in the earlier questions. If you saved your objects differently, or did not save these as objecs, replace `M` with your sample mean and `se` with the standard error you calculated!
+
+``` r
+(M - 100) / se
+```
+
+Remember to press the "run code" button to get the answer!
+:::
+::::
+
+
+
+
+### Question #2: Calculate the effect size for long coma patients
+
+For this question you will calculate the effect size using Cohen's d. The formula for Cohen's d is $d = \frac{M - \mu}{\sigma}$. Remember that the *population* mean for IQ scores is $\mu = 100$ and the *population* standard deviation for IQ scores is $\sigma = 15$. 
+Again, you can refer to my earlier example, just make sure you use the values you already calculated for `long_coma` data here!
+
+::: {.callout-tip title="Question 2: Effect Size"}
+
+What is Cohen's d for this sample of long coma patient IQs?
+
+*Rubric for Question 2 (1 point total):*
+
+-   .5 pt: Copy the R code that you used to answer this question.
+-   .5 pt: What is the effect size for this sample of long coma patient IQs? 
+
+:::
+
+```{webr}
+#| envir: hw
+#| exercise: ex_2
+# What is the effect size for this sample? 
+
+```
+
+:::: {.hint exercise="ex_2"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Remember that the formula for effect size is $d = \frac{M - \mu}{\sigma}$. 
+You know $\mu = 100$ and $\sigma = 15$ and you calculated $M$ above!
+Feel free to look back at my earlier code when I did this with the short_coma data. 
+
+Remember to press the "run code" button to get the answer!
+
+:::
+::::
+
+:::: {.solution exercise="ex_2"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. This will only work if you saved the sample mean as an object, `M`. If you used a different object name or did not save the mean as an object, replace `M` with the sample mean you calculated earlier. 
+
+``` r
+(M - 100) / 15
+```
+:::
+::::
+
+### Question 3: Calculating 95% Confidence Intervals
+
+For this question you will calculate the 95% CI for this sample. 
+
+Remember we have to calculate two values for confidence intervals: The lower bound, and the upper bound. 
+
+The formula for the lower bound is $M - 1.96\times\sigma_M$.
+The formula for the upper bound is $M + 1.96\times\sigma_M$.
+
+You already have all of the values you need to do this calculation!
+
+
+::: {.callout-tip title="Question 3: Confidence Intervals"}
+
+What is the 95% confidence interval for this sample of long coma patient IQs? 
+
+*Rubric for Question 3 (1 point total):*
+
+-   .5 pt: Copy the R code that you used to answer this question.
+-   .5 pt: What is the 95% confidence interval for long coma patient IQ? Remember to report both the lower and upper bound! 
+
+:::
+
+```{webr}
+#| envir: hw
+#| exercise: ex_3
+# What is the 95% confidence interval for this sample? 
+
+```
+
+:::: {.hint exercise="ex_3"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Remember we have to calculate two values for confidence intervals: The lower bound, and the upper bound. 
+
+The formula for the lower bound is $M - 1.96\times\sigma_M$.
+The formula for the upper bound is $M + 1.96\times\sigma_M$.
+
+You already calculated the sample mean and standard error in question 1!
+Feel free to look back at my earlier code when I did this with the short_coma data. 
+
+Remember to press the "run code" button to get the answer!
+
+:::
+::::
+
+:::: {.solution exercise="ex_3"}
+::: {.callout-note collapse="false"}
+## Solution
+
+Copy/paste this code below the existing code in the exercise. This will only work if you saved the sample mean as an object, `M`, and the standard error as an object `se`. If you used different object names or did not save these values as objects, replace `M` and `se` with the objects or values you calculated earlier. 
+Remember to press the "run code" button to get the answer!
+``` r
+lower <- M - 1.96*se
+upper <- M + 1.96*se
+
+lower
+upper
+```
+
+:::
+::::
+
+### Question 4: Interpretation & Write up
+
+The next three questions ask you to interpret the values you calculated in questions 1-3 above. These questions do not require R, so make sure you have completed questions 1-3 above and written down your answers before you start these questions!
+
+::: {.callout-tip title="Question 4a: Decision about your null hypothesis"}
+
+Assume we are conducting a two-tailed test with $\alpha=.05$. Based on your Z-score earlier (Question 1d), what decision will we make about the null hypothesis? 
+
+*Rubric for Question 4a (1 point total):*
+
+-   1 pt: Correctly state the decision we should make about the null hypothesis. 
+
+:::
+
+::: {.callout-tip title="Question 4b: Interpreting effect size"}
+
+Look at the effect size you calculated for long coma patients (Question 2). According to Cohen's guidelines, should we classify this as a small, medium, or large effect? Is this larger or smaller than the effect we found for short coma patients ($d = -.20$)
+
+*Rubric for Question 4b (1 point total):*
+
+-   .5 pt: Correctly state the size of the effect based on Cohen's guidelines. 
+-   .5 pt: Correctly state whether the effect for long coma patients is larger or smaller than the effect for short coma patients. 
+
+:::
+
+::: {.callout-tip title="Question 4c: Write up in APA format"}
+
+Write up your results in APA format! Make sure you include a sentence describing the main findings, reporting the sample mean in parentheses and identifying whether the difference you found was significant or not, and report the following statistics at the end of the sentence using correct statistical notation: Z, p, d, 95% CI.  
+
+Use my write-up for the short coma patients as an example!
+
+*Rubric for Question 4c (2 points total):*
+
+Check to make sure you have all of the following components (-.25 for each component that is missing or incorrect): 
+
+- A sentence clearly stating the main findings 
+- The sentence should identify whether any difference found is significant or not significant
+- The sample mean is reported in parentheses
+- Z-score reported using statistical notation
+- p-value reported correctly using statistical notation
+- Cohen's d reported using statistical notation
+- 95% confidence interval reported using statistical notation
+- All of the above are written clearly & professionally in 1-2 sentences (statistical notation needs to either be part of the sentence reported after a comma at the end, OR reported in parentheses at the end of the sentence with parentheses placed BEFORE the final period at the end of the sentence). 
+:::
+
+
