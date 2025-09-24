@@ -44,7 +44,7 @@ Type your answers to these questions in a separate word document and upload that
 
 ## Lab 2: About the data
 
-As mentioned above, the data in this lab are real data that come from a study of patients who recovered from a coma (Wong et al., 2001). In the original study, the researchers took patients who were in a coma (for a variety of reasons) and measured their IQ after they recovered from their coma. Some patients had their IQ measured at multiple points; here I am only showing you their maximum Verbal IQ scores (peak_viq). I have split the data into two datasets: the first, short_coma, is a dataset of patients who were in a coma for less than 7 days. The second, long_coma, is a dataset of patients who were in a coma for 7 days or more.
+As mentioned above, the data in this lab are real data that come from a study of patients who recovered from a coma (Wong et al., 2001). In the original study, the researchers took patients who were in a coma (for a variety of reasons) and measured their IQ after they recovered from their coma. Some patients had their IQ measured at multiple points; here I am only showing you their maximum Verbal IQ scores (peak_viq). I have split the data into two datasets: the first, `short_coma`, is a dataset of patients who were in a coma for less than 7 days. The second, `long_coma`, is a dataset of patients who were in a coma for 7 days or more.
 
 Here's an overview of the variables in the dataset: 
 
@@ -57,7 +57,7 @@ Here's an overview of the variables in the dataset:
 - **peak_viq**: The highest score the patient received on their verbal IQ tests.
 
 
-You will explore whether the patients appear to have IQs that are different from the general population. Remember, for the general population, IQ scores are normally distributed with $\mu = 100$ and $\sigma = 15$. We will practice R skills by calculating the Z-score, effect size (Cohen's d), and confidence interval for the sample - first I will show you how to do this with the short_coma sample as a demonstration and then you will practice doing the same thing with the long_ coma data_coma sample for the homework. 
+You will explore whether the patients appear to have IQs that are different from the general population. Remember, for the general population, IQ scores are normally distributed with $\mu = 100$ and $\sigma = 15$. We will practice R skills by calculating the Z-score, effect size (Cohen's d), and confidence interval for the sample - first I will show you how to do this with the short_coma sample as a demonstration and then you will practice doing the same thing with the `long_coma` sample for the homework. 
 
 ## Reviewing operations and functions in R
 
@@ -69,7 +69,7 @@ We're going to start by loading the data we will use to practice. I'm also loadi
 short_coma <- read.csv("data/short_coma.csv")
 head(short_coma)
 ``` 
-Remember that the function `head()` only prints the first six rows of the data, so the data above iare just a "peek" at the data, not the whole dataset!
+Remember that the function `head()` only prints the first six rows of the data, so the data above are just a "peek" at the data, not the whole dataset!
 
 The z-test is a nice way to practice reviewing basic R syntax, because unlike future statistical tests that we learn in R labs, there isn't a built-in function for doing a z-test in R. So instead we will use the formula to calculate the z-score directly. 
 
@@ -201,7 +201,7 @@ To write up these results in APA format, write a sentence like this:
 
 ## Homework #4: You try it!
 
-Now you will do the same analysis for long coma patients! I've loaded the long_coma patient data below, so make sure you are always looking at the `long_coma` data for this exercise. The variables in this dataset are the same as the data above - the only difference is that these patients were in a coma for **seven days or longer** Remember to look for the green boxes to identify the questions you need to ask and exactly what information we will be looking for when we grade. 
+Now you will do the same analysis for long coma patients! I've loaded the `long_coma` patient data below, so make sure you are always looking at the `long_coma` data for this exercise. The variables in this dataset are the same as the data above - the only difference is that these patients were in a coma for **seven days or longer** Remember to look for the green boxes to identify the questions you need to ask and exactly what information we will be looking for when we grade. 
 
 If you get stuck, try looking at what I did with the short_coma patient data above (you'll be doing the same thing just with the `long_coma` data) and remember you can click "Show Hint" and then "Show Solution" if you need help (or if you just want to check your work!). 
 
@@ -557,7 +557,7 @@ Look at the effect size you calculated for long coma patients (Question 2). Acco
 
 ::: {.callout-tip title="Question 4c: Write up in APA format"}
 
-Write up your results in APA format! Make sure you include a sentence describing the main findings, reporting the sample mean in parentheses and identifying whether the difference you found was significant or not, and report the following statistics at the end of the sentence using correct statistical notation: Z, p, d, 95% CI.  
+Write up your results in APA format! Make sure you include a sentence describing the main findings, reporting the sample mean in parentheses and identifying whether the difference you found was significant or not, and report the following statistics at the end of the sentence using correct statistical notation: Z, p, d, 95% CI.  Round all statistics to 2 decimal places. 
 
 Use my write-up for the short coma patients as an example!
 
@@ -565,14 +565,14 @@ Use my write-up for the short coma patients as an example!
 
 Check to make sure you have all of the following components (-.25 for each component that is missing or incorrect): 
 
-- A sentence clearly stating the main findings 
+- A sentence clearly describing the main findings
 - The sentence should identify whether any difference found is significant or not significant
 - The sample mean is reported in parentheses
 - Z-score reported using statistical notation
 - p-value reported correctly using statistical notation
 - Cohen's d reported using statistical notation
 - 95% confidence interval reported using statistical notation
-- All of the above are written clearly & professionally in 1-2 sentences (statistical notation needs to either be part of the sentence reported after a comma at the end, OR reported in parentheses at the end of the sentence with parentheses placed BEFORE the final period at the end of the sentence). 
+- All of the above are written clearly & professionally (Round all statistics to 2 decimals. Statistical notation needs to either be part of the sentence reported after a comma at the end, OR reported in parentheses at the end of the sentence with parentheses placed BEFORE the final period at the end of the sentence). 
 :::
 
 

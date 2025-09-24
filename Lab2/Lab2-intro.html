@@ -186,7 +186,7 @@ Remember: Questions will appear like this!
 </section>
 <section id="lab-2-about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="lab-2-about-the-data">Lab 2: About the data</h2>
-<p>As mentioned above, the data in this lab are real data that come from a study of patients who recovered from a coma (Wong et al., 2001). In the original study, the researchers took patients who were in a coma (for a variety of reasons) and measured their IQ after they recovered from their coma. Some patients had their IQ measured at multiple points; here I am only showing you their maximum Verbal IQ scores (peak_viq). I have split the data into two datasets: the first, short_coma, is a dataset of patients who were in a coma for less than 7 days. The second, long_coma, is a dataset of patients who were in a coma for 7 days or more.</p>
+<p>As mentioned above, the data in this lab are real data that come from a study of patients who recovered from a coma (Wong et al., 2001). In the original study, the researchers took patients who were in a coma (for a variety of reasons) and measured their IQ after they recovered from their coma. Some patients had their IQ measured at multiple points; here I am only showing you their maximum Verbal IQ scores (peak_viq). I have split the data into two datasets: the first, <code>short_coma</code>, is a dataset of patients who were in a coma for less than 7 days. The second, <code>long_coma</code>, is a dataset of patients who were in a coma for 7 days or more.</p>
 <p>Here’s an overview of the variables in the dataset:</p>
 <ul>
 <li><p><strong>id</strong>: The participant’s ID number</p></li>
@@ -194,7 +194,7 @@ Remember: Questions will appear like this!
 <li><p><strong>age</strong>: Participant’s age in years</p></li>
 <li><p><strong>peak_viq</strong>: The highest score the patient received on their verbal IQ tests.</p></li>
 </ul>
-<p>You will explore whether the patients appear to have IQs that are different from the general population. Remember, for the general population, IQ scores are normally distributed with <span class="math inline">\(\mu = 100\)</span> and <span class="math inline">\(\sigma = 15\)</span>. We will practice R skills by calculating the Z-score, effect size (Cohen’s d), and confidence interval for the sample - first I will show you how to do this with the short_coma sample as a demonstration and then you will practice doing the same thing with the long_ coma data_coma sample for the homework.</p>
+<p>You will explore whether the patients appear to have IQs that are different from the general population. Remember, for the general population, IQ scores are normally distributed with <span class="math inline">\(\mu = 100\)</span> and <span class="math inline">\(\sigma = 15\)</span>. We will practice R skills by calculating the Z-score, effect size (Cohen’s d), and confidence interval for the sample - first I will show you how to do this with the short_coma sample as a demonstration and then you will practice doing the same thing with the <code>long_coma</code> sample for the homework.</p>
 </section>
 <section id="reviewing-operations-and-functions-in-r" class="level2">
 <h2 class="anchored" data-anchor-id="reviewing-operations-and-functions-in-r">Reviewing operations and functions in R</h2>
@@ -209,7 +209,7 @@ eyJhdHRyIjp7ImVkaXQiOmZhbHNlLCJlbnZpciI6ImRlbW8iLCJldmFsIjp0cnVlfSwiY29kZSI6InNo
 </script>
 </div>
 </div>
-<p>Remember that the function <code>head()</code> only prints the first six rows of the data, so the data above iare just a “peek” at the data, not the whole dataset!</p>
+<p>Remember that the function <code>head()</code> only prints the first six rows of the data, so the data above are just a “peek” at the data, not the whole dataset!</p>
 <p>The z-test is a nice way to practice reviewing basic R syntax, because unlike future statistical tests that we learn in R labs, there isn’t a built-in function for doing a z-test in R. So instead we will use the formula to calculate the z-score directly.</p>
 <p>Remember that these are the basic mathematical operations in R:</p>
 <ul>
@@ -337,7 +337,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImVudmlyIjoiZGVtbyIsImV2YWwiOnRydWV9LCJjb2RlIjoibG93
 </section>
 <section id="homework-4-you-try-it" class="level2">
 <h2 class="anchored" data-anchor-id="homework-4-you-try-it">Homework #4: You try it!</h2>
-<p>Now you will do the same analysis for long coma patients! I’ve loaded the long_coma patient data below, so make sure you are always looking at the <code>long_coma</code> data for this exercise. The variables in this dataset are the same as the data above - the only difference is that these patients were in a coma for <strong>seven days or longer</strong> Remember to look for the green boxes to identify the questions you need to ask and exactly what information we will be looking for when we grade.</p>
+<p>Now you will do the same analysis for long coma patients! I’ve loaded the <code>long_coma</code> patient data below, so make sure you are always looking at the <code>long_coma</code> data for this exercise. The variables in this dataset are the same as the data above - the only difference is that these patients were in a coma for <strong>seven days or longer</strong> Remember to look for the green boxes to identify the questions you need to ask and exactly what information we will be looking for when we grade.</p>
 <p>If you get stuck, try looking at what I did with the short_coma patient data above (you’ll be doing the same thing just with the <code>long_coma</code> data) and remember you can click “Show Hint” and then “Show Solution” if you need help (or if you just want to check your work!).</p>
 <div class="cell" data-edit="false">
 <div>
@@ -824,19 +824,19 @@ Question 4c: Write up in APA format
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Write up your results in APA format! Make sure you include a sentence describing the main findings, reporting the sample mean in parentheses and identifying whether the difference you found was significant or not, and report the following statistics at the end of the sentence using correct statistical notation: Z, p, d, 95% CI.</p>
+<p>Write up your results in APA format! Make sure you include a sentence describing the main findings, reporting the sample mean in parentheses and identifying whether the difference you found was significant or not, and report the following statistics at the end of the sentence using correct statistical notation: Z, p, d, 95% CI. Round all statistics to 2 decimal places.</p>
 <p>Use my write-up for the short coma patients as an example!</p>
 <p><em>Rubric for Question 4c (2 points total):</em></p>
 <p>Check to make sure you have all of the following components (-.25 for each component that is missing or incorrect):</p>
 <ul>
-<li>A sentence clearly stating the main findings</li>
+<li>A sentence clearly describing the main findings</li>
 <li>The sentence should identify whether any difference found is significant or not significant</li>
 <li>The sample mean is reported in parentheses</li>
 <li>Z-score reported using statistical notation</li>
 <li>p-value reported correctly using statistical notation</li>
 <li>Cohen’s d reported using statistical notation</li>
 <li>95% confidence interval reported using statistical notation</li>
-<li>All of the above are written clearly &amp; professionally in 1-2 sentences (statistical notation needs to either be part of the sentence reported after a comma at the end, OR reported in parentheses at the end of the sentence with parentheses placed BEFORE the final period at the end of the sentence).</li>
+<li>All of the above are written clearly &amp; professionally (Round all statistics to 2 decimals. Statistical notation needs to either be part of the sentence reported after a comma at the end, OR reported in parentheses at the end of the sentence with parentheses placed BEFORE the final period at the end of the sentence).</li>
 </ul>
 </div>
 </div>
