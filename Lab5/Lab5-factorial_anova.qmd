@@ -1,0 +1,178 @@
+---
+title: "HW #9: R Lab - Factorial ANOVA"
+format: live-html
+resources:
+  - data
+webr:
+  packages:
+    - dplyr 
+    - tidyr
+    - ggplot2
+    - rstatix
+toc: true
+engine: knitr
+
+---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
+
+## R Lab #5 
+
+Welcome to the fifth R Lab for PSYS 2012!
+
+This lab, and the remainder of the labs this semester, will focus more on interpreting output of R analyses and practicing writing professional, APA style reports. The R code exercises will guide you through how to visualize and conduct a factorial ANOVA. I will do the analyses for you, so you only need to click "Run Code" to get the output. For the homework, you will create a formal report, including a graph of the results and a formal APA style write up as we have practiced in class.  
+
+If you are interested in learning more about how to do analyses in R on your own, I recommend the following resources: 
+
+- [Learning Statistics with R by Danielle Navarro](https://learningstatisticswithr.com/book/)
+- [R for Data Science by Hadley Wickham](https://r4ds.hadley.nz/)
+
+::: {.callout-tip title="Remember: Questions will appear like this!"}
+As a reminder, throughout this lab questions that you need to answer will appear in a block like this! 
+
+**You will write the answers to all questions in a *separate* word document!**
+
+All questions will include a rubric so you know what information to include.
+
+*Rubric example:*
+
+-   This is not a real rubric but is what a rubric will look like! 
+:::
+
+Type your answers to these questions in a separate word document and upload that document to Brightspace for evaluation. There is an "answer template" document attached to the Brightspace assignment.
+
+## Replication of Rosenbaum, Mama, & Algom (2017) 
+
+The Stroop effect is a classic cognitive psychology finding demonstrating the automaticity of reading. The effect (originally demonstrated by Stroop in 1935) typically reveals that when people are asked to name the *color* that a word is written in, they struggle if the word that is *written* names a different color. 
+
+For example, if you were asked to name the color that each of the following words is written in, you would likely find it easy (this is the **congruent** condition): 
+
+<span style="color:blue">**blue**</span>
+
+<span style="color:red">**red**</span>
+
+<span style="color:green">**green**</span>
+
+
+But if you were asked to name the color that each of these words is written in, you would probably find it harder (this is the **incongruent** condition):
+
+
+<span style="color:blue">**red**</span>
+
+<span style="color:red">**green**</span>
+
+<span style="color:green">**blue**</span>
+
+In a recent study, researchers Rosenbaum et al. (2017) found that position (e.g. whether you are sitting or standing) impacts participants ability to complete a stroop task. We will attempt to replicate these findings in a class demo, and analyze our class data in this lab. 
+
+The citation for the original paper is:
+Rosenbaum, D., Mama, Y., & Algom, D. (2017). Stand by your stroop: Standing up enhances selective attention and cognitive control. Psychological science, 28(12), 1864-1867.
+
+Let's see if we replicate these findings with our class data. I'll provide the R code to you (and explain it) so you just need to click "Run Code" to get the analysis. Once you have completed the analysis, you will write an APA style report of the analyses you've done. 
+
+### Exploring our data
+
+To start, let's load in the data. Remember that what you see as output here is just a glimpse of the first six rows of data. 
+
+
+```{webr}
+#| edit: false
+stroop <- read.csv("data/stroop.csv") |>
+  mutate(Condition = as.factor(Condition),
+         Position = as.factor(Position))
+
+head(stroop)
+``` 
+
+You can see that we have three variables. `Condition` identifies the different stroop conditions participants were assigned to (`Congruent`, where participants saw words written in matching colors, and `Incongruent`, where participants saw words in mismatched colors). `Position` identifies whether participants were `Sitting` or `Standing`. The third variable, `Time`, tells us how many seconds participants took to complete the task. 
+
+Let's start by creating some graphs of the data. Because we have **two** independent variables (`Condition` and `Position`), there are a few different ways we can plot the data. Below, I show you how to create two different plots of these data, and you can choose which one you like better - that is, which one you think more clearly portrays our results. There isn't a right or wrong answer - this is based on personal preference, and what you think is most clear.
+
+For this first graph, notice I am placing the `Condition` variable on the X axis, and the `Position` variable is represented using color (click "Run Code" to view the plot):
+
+```{webr}
+ggplot(data = stroop, aes(x = Condition, y = Time, fill = Position)) + 
+       geom_bar(stat = "summary", fun="mean", position = position_dodge()) + 
+       geom_errorbar(stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96), width=0, position = position_dodge(.9)) + 
+  theme_classic() 
+```
+
+For the next graph, now I will place the `Position` variable on the X axis, and the `Condition` variable will be represented using color (click "Run Code" to view the plot):
+
+```{webr}
+ggplot(data = stroop, aes(x = Position, y = Time, fill = Condition)) + 
+       geom_bar(stat = "summary", fun="mean", position = position_dodge()) + 
+       geom_errorbar(stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96), width=0, position = position_dodge(.9)) + 
+  theme_classic() 
+```
+
+An important goal of a graph is to convey your findings. In our ANOVA, we will be asking these questions: 
+
+- Is there a main effect of condition? That is, do participants take longer to complete the task in the incongruent vs. congruent position?
+- Is there a main effect of position? That is, do participants take longer to complete the task in the sitting vs. standing position?
+- Is there an interaction between condition and position? That is, does the effect of position seem different across the two conditions (or vice versa - does the effect of condition seem different across the two conditions)?
+
+Looking at these two graphs, which seems to best help you answer the questions above? Of course, we won't know if these effects are significant or not until we run the ANOVA, but the plot should help us get a sense for the whether there are main effects, and whether there is an interaction. **Choose the plot that _you_ think most clearly conveys the result, and share that one in your write-up when you complete the homework. There isn't a right or wrong answer - choose the plot that you think best conveys the findings**. 
+
+
+### Factorial ANOVA in R
+
+Now that we've seen the data, let's run the ANOVA and see if there are any significant main effects, and if there is a significant interaction. 
+
+We will use the function `anova_test()` from the rstatix package again. The syntax here is slightly different, and uses "formula notation" (we also used this notation for the independent samples t-test). The formula notation we will use below reads like this: 
+
+With formula notation, we identify the dependent (outcome) variable on the left side of the `~` symbol, and the independent (predictor) variables on the right side of the `~` symbol. 
+
+Because we have two independent variables (`Condition` and `Position`), we need to list both. If we wanted to *only* examine main effects we could write our formula like this: 
+`Time ~ Condition + Position`
+
+However, we don't just want to know the main effects - we also want to know if there is an interaction! R uses the symbol `:` to indicate an interaction, so we could write the formula to examine main effects and interaction like this: 
+
+`Time ~ Condition + Position + Condition:Position`
+
+That would tell us both the main effect of condition, the main effect of position, and the interaction between condition and position. 
+
+There's a shorthand most people use to ask for "all main effects and interactions", which is the `*` symbol. This formula is identical to the one used above: 
+
+`Time ~ Conditon * Position`
+
+I'll use this below (it's more commonly used), but in the output R will refer to the interaction using the `:` symbol, so it's good to be familiar with both. 
+
+Click "Run Code" to see the output of our ANOVA.
+
+```{webr}
+# anova_test() from the rstatix package
+anova_test(data = stroop, Time ~ Condition * Position)
+```
+
+If you look at the output of the code block above, you will see everything you need to write up an ANOVA in APA format. As with our lab last week, `DFn` stands for "degrees of freedom in numerator", and  `DFd` stands for "degrees of freedom in denominator". When reporting df in parentheses, always present DFn first, and DFd second. Then it reports F, the p-value, and eta-squared (`ges`, which stands for generalized eta-squared).
+
+However, unlike last week, we have three rows in our output now! Remember that when we do a 2x2 factorial ANOVA (what we're doing here), we will have three F-ratios: one for our first main effect, one for our second main effect, and one for the interaction term. Each row in the output above represents one of these effects: 
+
+- The first row tells us the main effect of `Condition`
+- The second row tells us the main effect of `Position`
+- The third row tells us the Condition by Position interaction, i.e. `Condition:Position`
+
+Do the results of the ANOVA confirm your suspicions after looking at the plot of the data? 
+
+### Homework rubric
+
+See below for the rubric for this homework, which asks you to *both* present the graph created above *and* write up the results of the ANOVA & post-hoc testing. Review notes from class for how to report these in APA format!
+
+::: {.callout-tip title="Question 1: Writing up results of within-groups ANOVA"}
+
+Choose **one** of the plots above to present in your write-up (there isn't a right or wrong answer, just your preference). Then use the R output from the code block above 
+to write a formal APA style write up (**including the graph you chose of the findings!**). See rubric below to make sure you are including everything you need to include! You should be able to include all of this information in just a few (2-4) sentences. **Your write-up should be written as a single paragraph, not as separate answers to each of the bullet points below**. 
+
+
+*Rubric for Question 1 (10 points total):*
+
+- **1 point** Plot is included and is legible & professional (not a screenshot or photo of your entire computer screen) 
+- **1 point** Identify the type of factorial ANOVA conducted 
+- **1 point** State (briefly) what was measured/what the conditions were.
+- **2 points** Report whether the main effect of condition was significant, and report F, both dfs, p, and generalized eta-squared. 
+- **2 points** Report whether the main effect of position was significant, and report F, both dfs, p, and generalized eta-squared. 
+- **2 points** Report whether the interaction was significant, and report F, both dfs, p, and generalized eta-squared. If the interaction *was* significant, then you should start this sentence by saying "These main effects were qualified by a significant interaction..." before reporting the interaction statistics. 
+- **1 point** Your report must be presented in a single, professional short paragraph (2-4 sentences). Proofread for grammatical & spelling errors
+
+:::
