@@ -1,5 +1,5 @@
 ---
-title: "HW #8: R Lab - Repeated Measures ANOVA"
+title: "HW #8: R Lab - Within-Groups ANOVA"
 format: live-html
 resources:
   - data
@@ -45,7 +45,7 @@ Type your answers to these questions in a separate word document and upload that
 
 In the last R lab, we used an independent measures t-test to replicate a classic cognitive psychology study showing that processing "deep" features of a word (like the meaning) aids in the later recall of a word, compared to processing the "shallow" features of a word (like what letters it contains). 
 
-In class we collected data from a study by Craik & Tulving that replicated and extended these findings in 1975, exploring in more detail what features of a word lead to "deep" processing versus "shallow" processing. In this demonstration, you were asked to process whether a word was written in upper-case or lower-case letters (the `case` condition), whether it rhymed with another word (the `rhyme` condition), or whether it fit into a sentence (the `sentence` condition). This was a within groups design (all participants completed all three types of trials) so we will conduct a repeated-measures ANOVA to determine which type of processing leads to the best retention. 
+In class we collected data from a study by Craik & Tulving that replicated and extended these findings in 1975, exploring in more detail what features of a word lead to "deep" processing versus "shallow" processing. In this demonstration, you were asked to process whether a word was written in upper-case or lower-case letters (the `case` condition), whether it rhymed with another word (the `rhyme` condition), or whether it fit into a sentence (the `sentence` condition). This was a within groups design (all participants completed all three types of trials) so we will conduct a one-way within-groups ANOVA to determine which type of processing leads to the best retention. 
 
 The citation for the original paper is:
 Craik, F. I., & Tulving, E. (1975). Depth of processing and the retention of words in episodic memory. Journal of experimental Psychology: General, 104(3), 268.
@@ -120,7 +120,7 @@ After `DFn` and `DFd`, R reports the F-ratio and the p-value. Remember, p-values
 
 Remember, the ANOVA only tests the *omnibus null hypothesis* that there is no difference between groups. If we reject the null, we just know that there is some difference, but we don't know specifically which conditions differ from one another. Post-hoc testing allows us to identify which means are different in an ANOVA.
 
-Post-hoc testing is complex for a repeated measures ANOVA (especially when the assumption of sphericity is not met, as it is not in this example, which makes the TukeyHSD test inappropriate). We will use the simplest post-hoc test here, the Bonferroni correction. As a reminder, for the Bonferroni correction, we adjust our alpha level to account for multiple tests. In this example, we have three conditions, and therefore three possible pairwise tests we might want to run: 
+Post-hoc testing is complex for a within-groups ANOVA (especially when the assumption of sphericity is not met, as it is not in this example, which makes the TukeyHSD test inappropriate). We will use the simplest post-hoc test here, the Bonferroni correction. As a reminder, for the Bonferroni correction, we adjust our alpha level to account for multiple tests. In this example, we have three conditions, and therefore three possible pairwise tests we might want to run: 
 
 - `case` vs. `rhyme` condition
 - `rhyme` vs. `sentence` condition

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>HW #8: R Lab - Repeated Measures ANOVA</title>
+<title>HW #8: R Lab - Within-Groups ANOVA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -93,7 +93,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">HW #8: R Lab - Repeated Measures ANOVA</h1>
+<h1 class="title">HW #8: R Lab - Within-Groups ANOVA</h1>
 </div>
 
 
@@ -143,7 +143,7 @@ Remember: Questions will appear like this!
 <section id="replication-of-craik-tulving-1975" class="level2">
 <h2 class="anchored" data-anchor-id="replication-of-craik-tulving-1975">Replication of Craik &amp; Tulving (1975)</h2>
 <p>In the last R lab, we used an independent measures t-test to replicate a classic cognitive psychology study showing that processing “deep” features of a word (like the meaning) aids in the later recall of a word, compared to processing the “shallow” features of a word (like what letters it contains).</p>
-<p>In class we collected data from a study by Craik &amp; Tulving that replicated and extended these findings in 1975, exploring in more detail what features of a word lead to “deep” processing versus “shallow” processing. In this demonstration, you were asked to process whether a word was written in upper-case or lower-case letters (the <code>case</code> condition), whether it rhymed with another word (the <code>rhyme</code> condition), or whether it fit into a sentence (the <code>sentence</code> condition). This was a within groups design (all participants completed all three types of trials) so we will conduct a repeated-measures ANOVA to determine which type of processing leads to the best retention.</p>
+<p>In class we collected data from a study by Craik &amp; Tulving that replicated and extended these findings in 1975, exploring in more detail what features of a word lead to “deep” processing versus “shallow” processing. In this demonstration, you were asked to process whether a word was written in upper-case or lower-case letters (the <code>case</code> condition), whether it rhymed with another word (the <code>rhyme</code> condition), or whether it fit into a sentence (the <code>sentence</code> condition). This was a within groups design (all participants completed all three types of trials) so we will conduct a one-way within-groups ANOVA to determine which type of processing leads to the best retention.</p>
 <p>The citation for the original paper is: Craik, F. I., &amp; Tulving, E. (1975). Depth of processing and the retention of words in episodic memory. Journal of experimental Psychology: General, 104(3), 268.</p>
 <p>Let’s see if we replicate these findings with our class data. I’ll provide the R code to you (and explain it) so you just need to click “Run Code” to get the analysis. Once you have done all three tasks, you will write an APA style report of the analyses you’ve done.</p>
 <section id="exploring-our-data" class="level3">
@@ -206,7 +206,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyBhbm92YV90ZXN0KCkgZnJv
 <section id="post-hoc-testing" class="level3">
 <h3 class="anchored" data-anchor-id="post-hoc-testing">Post-hoc testing</h3>
 <p>Remember, the ANOVA only tests the <em>omnibus null hypothesis</em> that there is no difference between groups. If we reject the null, we just know that there is some difference, but we don’t know specifically which conditions differ from one another. Post-hoc testing allows us to identify which means are different in an ANOVA.</p>
-<p>Post-hoc testing is complex for a repeated measures ANOVA (especially when the assumption of sphericity is not met, as it is not in this example, which makes the TukeyHSD test inappropriate). We will use the simplest post-hoc test here, the Bonferroni correction. As a reminder, for the Bonferroni correction, we adjust our alpha level to account for multiple tests. In this example, we have three conditions, and therefore three possible pairwise tests we might want to run:</p>
+<p>Post-hoc testing is complex for a within-groups ANOVA (especially when the assumption of sphericity is not met, as it is not in this example, which makes the TukeyHSD test inappropriate). We will use the simplest post-hoc test here, the Bonferroni correction. As a reminder, for the Bonferroni correction, we adjust our alpha level to account for multiple tests. In this example, we have three conditions, and therefore three possible pairwise tests we might want to run:</p>
 <ul>
 <li><code>case</code> vs.&nbsp;<code>rhyme</code> condition</li>
 <li><code>rhyme</code> vs.&nbsp;<code>sentence</code> condition</li>
