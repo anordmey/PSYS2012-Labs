@@ -138,11 +138,19 @@ There's a shorthand most people use to ask for "all main effects and interaction
 
 I'll use this below (it's more commonly used), but in the output R will refer to the interaction using the `:` symbol, so it's good to be familiar with both. 
 
-Click "Run Code" to see the output of our ANOVA.
+Click "Run Code" to see the output of our ANOVA. 
 
 ```{webr}
 # anova_test() from the rstatix package
-anova_test(data = stroop, Time ~ Condition * Position)
+options(scipen = 999)
+stroop_anova <- anova_test(data = stroop, Time ~ Condition * Position)
+
+# Do some silly things to round the p-values in a more sensible way
+
+better_stroop_anova <- stroop_anova 
+better_stroop_anova$p <- round(stroop_anova$p, 4)
+
+better_stroop_anova
 ```
 
 If you look at the output of the code block above, you will see everything you need to write up an ANOVA in APA format. As with our lab last week, `DFn` stands for "degrees of freedom in numerator", and  `DFd` stands for "degrees of freedom in denominator". When reporting df in parentheses, always present DFn first, and DFd second. Then it reports F, the p-value, and eta-squared (`ges`, which stands for generalized eta-squared).
