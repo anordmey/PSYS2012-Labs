@@ -144,7 +144,7 @@ See below for the rubric for this homework, which asks you to *both* present the
 
 ::: {.callout-tip title="Question 1: Writing up results of within-groups ANOVA"}
 
-Use all of the R output from the code blocks above to write a formal APA style write up (**including a graph of the findings!**). See rubric below to make sure you are including everything you need to include! You should be able to include all of this information in just a few (1-3) sentences. **Your write-up should be written as a single paragraph, not as separate answers to each of the bullet points below**. 
+Use all of the R output from the code blocks above to write a formal APA style write up (**including a graph of the findings!**). See rubric below to make sure you are including everything you need to include! You should be able to include all of this information in just a few (2-4) sentences. **Your write-up should be written as a single paragraph, not as separate answers to each of the bullet points below**. 
 
 
 *Rubric for Question 1 (10 points total):*
