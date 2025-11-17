@@ -39,7 +39,7 @@ All questions will include a rubric so you know what information to include.
 
 Type your answers to these questions in a separate word document and upload that document to Brightspace for evaluation. There is an "answer template" document attached to the Brightspace assignment.
 
-## What student behaviors predict GPA? 
+## What predicts first year college GPA? 
 
 Our data today come from a sample of data produced by Educational Testing Service, the company that administers standardized tests such as the SAT and the GRE. Many college admissions offices wonder if SAT scores predict student success in college. Is there any predictive value of knowing a student's SAT performance? If SAT scores don't predict college performance then maybe they should not be required to apply to college. We'll explore the relationship between high school grades, SAT scores, and first year college performance in today's lab on correlation and regression. 
 
