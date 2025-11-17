@@ -1,0 +1,155 @@
+---
+title: "HW #11: R Lab - Regression"
+format: live-html
+resources:
+  - data
+webr:
+  packages:
+    - dplyr 
+    - tidyr
+    - ggplot2
+    - GGally
+toc: true
+engine: knitr
+
+---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
+
+## R Lab #6
+
+Welcome to the sixth and final R Lab for PSYS 2012!
+
+If you are interested in learning more about how to do analyses in R on your own, I recommend the following resources: 
+
+- [Learning Statistics with R by Danielle Navarro](https://learningstatisticswithr.com/book/)
+- [R for Data Science by Hadley Wickham](https://r4ds.hadley.nz/)
+
+::: {.callout-tip title="Remember: Questions will appear like this!"}
+As a reminder, throughout this lab questions that you need to answer will appear in a block like this! 
+
+**You will write the answers to all questions in a *separate* word document!**
+
+All questions will include a rubric so you know what information to include.
+
+*Rubric example:*
+
+-   This is not a real rubric but is what a rubric will look like! 
+:::
+
+Type your answers to these questions in a separate word document and upload that document to Brightspace for evaluation. There is an "answer template" document attached to the Brightspace assignment.
+
+## What predicts first year college GPA? 
+
+Our data today come from a sample of data produced by Educational Testing Service, the company that administers standardized tests such as the SAT and the GRE. Many college admissions offices wonder if SAT scores predict student success in college. Is there any predictive value of knowing a student's SAT performance? If SAT scores don't predict college performance then maybe they should not be required to apply to college. We'll explore the relationship between high school grades, SAT scores, and first year college performance in today's lab on correlation and regression. 
+
+::: {.callout-note}
+Just a note that if SAT scores DO predict college performance, it's still worth discussing whether SAT scores are an *equitable* measure of performance. There are many reasons why people criticize the SAT as way to predict student success - for example, researchers have raised concerns about socioeconomic differences in SAT performance, and others have pointed out that the SAT may be biased towards students from a particular cultural background. These are all questions that go beyond the scope of the data we'll explore in today's lab, but they are great questions to think about!
+:::
+
+## Exploring our data
+
+Let's load the dataset and see what variables we have to explore: 
+
+```{webr}
+#| edit: false
+college <- read.csv("data/satgpa.csv")
+head(college)
+```
+
+Our variables are: 
+
+- `sat_v`: The student's verbal SAT score.
+- `sat_m`: The student's math SAT score.
+- `hs_gpa`: The student's high school GPA
+- `fy_GPA`: The student's GPA at the end of their first year in college. This will be our outcome variable, and we will use the other variables as predictor variables. 
+
+We will do two analyses with these data. First, we will look for simple correlations between each of the variables. Then we will perform a standard multiple regression to see how well we can predict a student's GPA from the other variables. 
+
+## Question 1: Exploring simple correlations
+
+Let's start by looking at the simple correlation between all of these variables. We can do this by creating a correlation matrix using the function `cor()` in R. This function will let us input an entire dataframe, and it will output the correlation of every pair of variables in our dataset: 
+
+Click "Run Code" to see a basic correlation matrix: 
+
+```{webr}
+cor(college)
+```
+
+The output here is called a **correlation matrix**. Notice that it is a table with all variables listed vertically and horizontally. The values in the table are all values of r (Pearson's correlation coefficient). The diagonal indicates that the correlation of every variable with itself is r = 1.00. You will also notice that each value of r is duplicated above and below this diagonal - that is, the correlation between `sat_v` and `sat_m` is r = .467, and this occurs twice in the table.
+
+Some functions in R can create even more elaborate correlation matrices. For example, the function `ggpairs()` from the package `GGally` can create a correlation matrix that shows the correlation below the diagonal, and scatterplots above the diagonal - a lot of information packed into one graphic! 
+
+Click "run code" to see a fancier correlation matrix!
+
+```{webr}
+ggpairs(data = college,
+        lower = list(continuous = wrap("smooth", colour="blue", alpha = .2)), 
+        diag = list(continuous = "blankDiag"))
+```
+
+In this fancier correlation matrix, the diagonal is now blank (to reduce clutter and make the plot easier to read). Above the diagonal we have the Pearson Correlation Coefficient, with asterisks indicating if the relatinoship is significant (`***` means p < .001). Below the diagonal we have scatterplots to visualize the relationship. 
+
+For Question 1, copy and paste this plot below, then answer the questions about the relationships depicted here. 
+
+### Question 1: Interpreting a correlation matrix
+::: {.callout-tip title="Question 1:  Interpreting a correlation matrix"}
+
+Copy and paste the fancy correlation matrix created using the R code above. Then answer the questions listed below about this plot. 
+
+*Rubric for Question 1 (3 points total):*
+
+- **1a (1 point)** Plot is included and is legible & professional (not a screenshot or photo of your entire computer screen) 
+- **1b (1 point)** What is the strongest correlation reported in this correlation matrix? Answer by filling in the blanks in this sentence: "The strongest correlation is between _______ and _______, with r = ________". 
+- **1c (1 point)** What is the weakest correlation reported in this correlation matrix? Answer by filling in the blanks in this sentence: "The weakest correlation is between _______ and _______, with r = ________". 
+
+:::
+
+## Question 2: Multiple Regression
+
+Next we will use these data to conduct a standard multiple regression. Our output variable will the `fy_gpa` (a student's GPA after their first year of college). As predictor variables we will include `sat_v`, `sat_m`, and `hs_gpa`. 
+
+The function that we will use to produce a regression is `lm()` with formula notation to indicate the relationship between our outcome variable and our predictor variables. That is, our outcome variable `fy_gpa` will go on the left of the `~` symbol, and our predictor variables will go on the right (separated by a `+` sign). 
+
+```{webr}
+gpa_model <- lm(data = college, fy_gpa ~ sat_v + sat_m + hs_gpa)
+gpa_model
+```
+
+Notice that the results of our `lm()` function here show us the coefficients for the intercept and for each predictor. For question 2a, use these values to write out the full regression equation that we could use to predict first year GPA (see multiple regression slides for an example!). 
+
+
+### Question 2a: Writing a regression equation
+::: {.callout-tip title="Question 2a: Writing a regression equation"}
+
+Using the output above, write the regression equation by plugging in the correlation coefficients into the blanks below (round to 2 decimals): 
+
+predicted first year GPA = _______(verbal SAT) + _______(math SAT) + _______(high school GPA) + _______. 
+
+*Rubric for Question 2a (2 points total):*
+
+- The regression equation is filled out correctly (fill in the blanks in the example above). Round each coefficient to 2 decimals. **.5 points for each coefficient placed correctly in the regression equation.** 
+
+:::
+
+The output of the linear model gives us all of the coefficients for our regression equation, but that's all the information it gives us. How can we tell our model fit, or whether the model or any individual coefficients are significant? The function `summary()` will give us all of this additional information: 
+
+```{webr}
+summary(gpa_model)
+```
+
+Use the output above to write up a full write-up of our regression, using the rubric below and slides posted on Brightspace to make sure you are including all needed information. 
+
+### Question 2b: Writing up the results of a regression
+::: {.callout-tip title="Question 2b: Writing up the results of a regression"}
+
+Use the summary output of the regression model to write up the results of our regression in APA format. 
+
+*Rubric for Question 2b (5 points total):*
+
+- (**1 point**):  State whether the overall model was significant, and report F-ratio, df, and p-value in APA format.
+- (**1 point**): State how much of the variance in first year GPA is explained by our model, and report R-squared. 
+- (**3 points**): State the significance of each predictor in the model, reporting b, SE, and p in parentheses for each predictor. 
+
+:::
+
