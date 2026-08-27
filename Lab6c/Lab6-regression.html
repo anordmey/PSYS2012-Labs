@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>HW #11: R Lab - Regression</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -24,15 +27,16 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="Lab6-regression_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Lab6-regression_files/libs/quarto-html/quarto.js"></script>
+<script src="Lab6-regression_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Lab6-regression_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="Lab6-regression_files/libs/quarto-html/popper.min.js"></script>
 <script src="Lab6-regression_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="Lab6-regression_files/libs/quarto-html/anchor.min.js"></script>
 <link href="Lab6-regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Lab6-regression_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="Lab6-regression_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="Lab6-regression_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Lab6-regression_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Lab6-regression_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="Lab6-regression_files/libs/bootstrap/bootstrap-138a6193a3bd40baf1e627da441a4734.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="Lab6-regression_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="Lab6-regression_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script type="module" src="Lab6-regression_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
@@ -41,7 +45,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body>
+<body class="quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -50,7 +54,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#r-lab-6" id="toc-r-lab-6" class="nav-link active" data-scroll-target="#r-lab-6">R Lab #6</a></li>
-  <li><a href="#what-predicts-first-year-college-gpa" id="toc-what-predicts-first-year-college-gpa" class="nav-link" data-scroll-target="#what-predicts-first-year-college-gpa">What predicts first year college GPA?</a></li>
+  <li><a href="#can-personality-predict-loneliness" id="toc-can-personality-predict-loneliness" class="nav-link" data-scroll-target="#can-personality-predict-loneliness">Can personality predict loneliness?</a></li>
   <li><a href="#exploring-our-data" id="toc-exploring-our-data" class="nav-link" data-scroll-target="#exploring-our-data">Exploring our data</a></li>
   <li><a href="#question-1-exploring-simple-correlations" id="toc-question-1-exploring-simple-correlations" class="nav-link" data-scroll-target="#question-1-exploring-simple-correlations">Question 1: Exploring simple correlations</a>
   <ul class="collapse">
@@ -99,7 +103,7 @@ ul.task-list li input[type="checkbox"] {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Remember: Questions will appear like this!
+<span class="screen-reader-only">Tip</span>Remember: Questions will appear like this!
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -114,22 +118,14 @@ Remember: Questions will appear like this!
 </div>
 <p>Type your answers to these questions in a separate word document and upload that document to Brightspace for evaluation. There is an “answer template” document attached to the Brightspace assignment.</p>
 </section>
-<section id="what-predicts-first-year-college-gpa" class="level2">
-<h2 class="anchored" data-anchor-id="what-predicts-first-year-college-gpa">What predicts first year college GPA?</h2>
-<p>Our data today come from a sample of data produced by Educational Testing Service, the company that administers standardized tests such as the SAT and the GRE. Many college admissions offices wonder if SAT scores predict student success in college. Is there any predictive value of knowing a student’s SAT performance? If SAT scores don’t predict college performance then maybe they should not be required to apply to college. We’ll explore the relationship between high school grades, SAT scores, and first year college performance in today’s lab on correlation and regression.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Just a note that if SAT scores DO predict college performance, it’s still worth discussing whether SAT scores are an <em>equitable</em> measure of performance. There are many reasons why people criticize the SAT as way to predict student success - for example, researchers have raised concerns about socioeconomic differences in SAT performance, and others have pointed out that the SAT may be biased towards students from a particular cultural background. These are all questions that go beyond the scope of the data we’ll explore in today’s lab, but they are great questions to think about!</p>
-</div>
-</div>
+<section id="can-personality-predict-loneliness" class="level2">
+<h2 class="anchored" data-anchor-id="can-personality-predict-loneliness">Can personality predict loneliness?</h2>
+<p>Earlier in the semester you took a survey that asked about personality and loneliness. We already analyzed some of the loneliness data in Homework #3, comparing our sample of UVM Psychology student loneliness to the population norms for college students collected in 1996. In this lab, we will revisit these data, this time to see if we can use the Big 5 personality traits to predict loneliness in our sample.</p>
+<p>As a reminder, these data came from these sources:</p>
+<ul>
+<li><p><a href="https://gosling.psy.utexas.edu/scales-weve-developed/ten-item-personality-measure-tipi/">Ten Item Personality Measure (TIPI)</a></p></li>
+<li><p><a href="https://sparqtools.org/mobility-measure/ucla-loneliness-scale-version-3/">UCLA Loneliness Scale (Version 3)</a></p></li>
+</ul>
 </section>
 <section id="exploring-our-data" class="level2">
 <h2 class="anchored" data-anchor-id="exploring-our-data">Exploring our data</h2>
@@ -140,18 +136,20 @@ Note
 
 </div>
 <script type="webr-1-contents">
-eyJhdHRyIjp7ImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlfSwiY29kZSI6ImNvbGxlZ2UgPC0gcmVhZC5jc3YoXCJkYXRhL3NhdGdwYS5jc3ZcIilcbmhlYWQoY29sbGVnZSkifQ==
+eyJhdHRyIjp7ImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlfSwiY29kZSI6ImxvbmVseV9kYXRhIDwtIHJlYWQuY3N2KFwiZGF0YS9wZXJzb25hbGl0eV9sb25lbGluZXNzLmNzdlwiKVxuaGVhZChsb25lbHlfZGF0YSkifQ==
 </script>
 </div>
 </div>
 <p>Our variables are:</p>
 <ul>
-<li><code>sat_v</code>: The student’s verbal SAT score.</li>
-<li><code>sat_m</code>: The student’s math SAT score.</li>
-<li><code>hs_gpa</code>: The student’s high school GPA</li>
-<li><code>fy_GPA</code>: The student’s GPA at the end of their first year in college. This will be our outcome variable, and we will use the other variables as predictor variables.</li>
+<li><code>extraversion</code>: A measure of how outgoing and sociable a person is.</li>
+<li><code>agreeableness</code>: A measure of how friendly and warm a person is.</li>
+<li><code>conscientiousness</code>: A measure of how diligent and organized a person is.</li>
+<li><code>neuroticism</code>: A measure of how anxious and emotionally (un)stable a person is.</li>
+<li><code>openness</code>: A measure of how open to new experiences and creative a person is.</li>
+<li><code>loneliness</code>: A measure of how lonely a person is.</li>
 </ul>
-<p>We will do two analyses with these data. First, we will look for simple correlations between each of the variables. Then we will perform a standard multiple regression to see how well we can predict a student’s GPA from the other variables.</p>
+<p>We will do two analyses with these data. First, we will look for simple correlations between each of the variables. Then we will perform a standard multiple regression to see how well we can predict loneliness from the personality variables.</p>
 </section>
 <section id="question-1-exploring-simple-correlations" class="level2">
 <h2 class="anchored" data-anchor-id="question-1-exploring-simple-correlations">Question 1: Exploring simple correlations</h2>
@@ -163,11 +161,11 @@ eyJhdHRyIjp7ImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlfSwiY29kZSI6ImNvbGxlZ2UgPC0gcmVhZC5j
 
 </div>
 <script type="webr-2-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY29yKGNvbGxlZ2UpIn0=
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY29yKGxvbmVseV9kYXRhKSJ9
 </script>
 </div>
 </div>
-<p>The output here is called a <strong>correlation matrix</strong>. Notice that it is a table with all variables listed vertically and horizontally. The values in the table are all values of r (Pearson’s correlation coefficient). The diagonal indicates that the correlation of every variable with itself is r = 1.00. You will also notice that each value of r is duplicated above and below this diagonal - that is, the correlation between <code>sat_v</code> and <code>sat_m</code> is r = .467, and this occurs twice in the table.</p>
+<p>The output here is called a <strong>correlation matrix</strong>. Notice that it is a table with all variables listed vertically and horizontally. The values in the table are all values of r (Pearson’s correlation coefficient). The diagonal indicates that the correlation of every variable with itself is r = 1.00. You will also notice that each value of r is duplicated above and below this diagonal, because in a grid each correlation is repeated twice.</p>
 <p>Some functions in R can create even more elaborate correlation matrices. For example, the function <code>ggpairs()</code> from the package <code>GGally</code> can create a correlation matrix that shows the correlation below the diagonal, and scatterplots above the diagonal - a lot of information packed into one graphic!</p>
 <p>Click “run code” to see a fancier correlation matrix!</p>
 <div class="cell">
@@ -176,11 +174,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY29yKGNvbGxlZ2UpIn0=
 
 </div>
 <script type="webr-3-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwYWlycyhkYXRhID0gY29sbGVnZSxcbiAgICAgICAgbG93ZXIgPSBsaXN0KGNvbnRpbnVvdXMgPSB3cmFwKFwic21vb3RoXCIsIGNvbG91cj1cImJsdWVcIiwgYWxwaGEgPSAuMikpLCBcbiAgICAgICAgZGlhZyA9IGxpc3QoY29udGludW91cyA9IFwiYmxhbmtEaWFnXCIpKSJ9
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwYWlycyhkYXRhID0gbG9uZWx5X2RhdGEsXG4gICAgICAgIGxvd2VyID0gbGlzdChjb250aW51b3VzID0gd3JhcChcInNtb290aFwiLCBjb2xvdXI9XCJibHVlXCIsIGFscGhhID0gLjIpKSwgXG4gICAgICAgIGRpYWcgPSBsaXN0KGNvbnRpbnVvdXMgPSBcImJsYW5rRGlhZ1wiKSkifQ==
 </script>
 </div>
 </div>
-<p>In this fancier correlation matrix, the diagonal is now blank (to reduce clutter and make the plot easier to read). Above the diagonal we have the Pearson Correlation Coefficient, with asterisks indicating if the relatinoship is significant (<code>***</code> means p &lt; .001). Below the diagonal we have scatterplots to visualize the relationship.</p>
+<p>In this fancier correlation matrix, the diagonal is now blank (to reduce clutter and make the plot easier to read). Above the diagonal we have the Pearson Correlation Coefficient, with asterisks indicating if the relationship is significant (<code>***</code> means p &lt; .001). Below the diagonal we have scatterplots to visualize the relationship.</p>
 <p>For Question 1, copy and paste this plot below, then answer the questions about the relationships depicted here.</p>
 <section id="question-1-interpreting-a-correlation-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="question-1-interpreting-a-correlation-matrix">Question 1: Interpreting a correlation matrix</h3>
@@ -190,7 +188,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwYWlycyhkYXRhID0gY29s
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Question 1: Interpreting a correlation matrix
+<span class="screen-reader-only">Tip</span>Question 1: Interpreting a correlation matrix
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -207,19 +205,19 @@ Question 1: Interpreting a correlation matrix
 </section>
 <section id="question-2-multiple-regression" class="level2">
 <h2 class="anchored" data-anchor-id="question-2-multiple-regression">Question 2: Multiple Regression</h2>
-<p>Next we will use these data to conduct a standard multiple regression. Our output variable will the <code>fy_gpa</code> (a student’s GPA after their first year of college). As predictor variables we will include <code>sat_v</code>, <code>sat_m</code>, and <code>hs_gpa</code>.</p>
-<p>The function that we will use to produce a regression is <code>lm()</code> with formula notation to indicate the relationship between our outcome variable and our predictor variables. That is, our outcome variable <code>fy_gpa</code> will go on the left of the <code>~</code> symbol, and our predictor variables will go on the right (separated by a <code>+</code> sign).</p>
+<p>Next we will use these data to conduct a standard multiple regression. Our output variable will be <code>loneliness</code>. As predictor variables we will include all of the Big 5 personality traits (<code>extraversion</code>, <code>agreeableness</code>, <code>conscientiousness</code>, <code>neuroticism</code>, and <code>openness</code>)</p>
+<p>The function that we will use to produce a regression is <code>lm()</code> with formula notation to indicate the relationship between our outcome variable and our predictor variables. That is, our outcome variable <code>loneliness</code> will go on the left of the <code>~</code> symbol, and our predictor variables will go on the right (separated by a <code>+</code> sign).</p>
 <div class="cell">
 <div>
 <div id="webr-4" class="exercise-cell">
 
 </div>
 <script type="webr-4-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ3BhX21vZGVsIDwtIGxtKGRhdGEgPSBjb2xsZWdlLCBmeV9ncGEgfiBzYXRfdiArIHNhdF9tICsgaHNfZ3BhKVxuZ3BhX21vZGVsIn0=
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibG9uZWx5X21vZGVsIDwtIGxtKGRhdGEgPSBsb25lbHlfZGF0YSwgbG9uZWxpbmVzcyB+IGV4dHJhdmVyc2lvbiArIGFncmVlYWJsZW5lc3MgKyBjb25zY2llbnRpb3VzbmVzcyArIG5ldXJvdGljaXNtICsgb3Blbm5lc3MpXG5sb25lbHlfbW9kZWwifQ==
 </script>
 </div>
 </div>
-<p>Notice that the results of our <code>lm()</code> function here show us the coefficients for the intercept and for each predictor. For question 2a, use these values to write out the full regression equation that we could use to predict first year GPA (see multiple regression slides for an example!).</p>
+<p>Notice that the results of our <code>lm()</code> function here show us the coefficients for the intercept and for each predictor. For question 2a, use these values to write out the full regression equation that we could use to predict loneliness (see multiple regression slides for an example!).</p>
 <section id="question-2a-writing-a-regression-equation" class="level3">
 <h3 class="anchored" data-anchor-id="question-2a-writing-a-regression-equation">Question 2a: Writing a regression equation</h3>
 <div class="callout callout-style-default callout-tip callout-titled" title="Question 2a: Writing a regression equation">
@@ -228,12 +226,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ3BhX21vZGVsIDwtIGxtKGRh
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Question 2a: Writing a regression equation
+<span class="screen-reader-only">Tip</span>Question 2a: Writing a regression equation
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Using the output above, write the regression equation by plugging in the correlation coefficients into the blanks below (round to 2 decimals):</p>
-<p>predicted first year GPA = _______(verbal SAT) + _______(math SAT) + _______(high school GPA) + _______.</p>
+<p>loneliness = _______extraversion + _______agreeableness + _______conscientiousness + _______neuroticism + _______openness + _______.</p>
 <p><em>Rubric for Question 2a (2 points total):</em></p>
 <ul>
 <li>The regression equation is filled out correctly (fill in the blanks in the example above). Round each coefficient to 2 decimals. <strong>.5 points for each coefficient placed correctly in the regression equation.</strong></li>
@@ -247,7 +245,7 @@ Question 2a: Writing a regression equation
 
 </div>
 <script type="webr-5-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3VtbWFyeShncGFfbW9kZWwpIn0=
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3VtbWFyeShsb25lbHlfbW9kZWwpIn0=
 </script>
 </div>
 </div>
@@ -261,16 +259,16 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3VtbWFyeShncGFfbW9kZWwp
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Question 2b: Writing up the results of a regression
+<span class="screen-reader-only">Tip</span>Question 2b: Writing up the results of a regression
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Use the summary output of the regression model to write up the results of our regression in APA format.</p>
-<p><em>Rubric for Question 2b (5 points total):</em></p>
+<p>Use the summary output of the regression model to write up the results of our regression in APA format. Your write-up should be written in a full paragraph (do not reply in individual bulletpoints to the points below).</p>
+<p><em>Rubric for Question 2b (5 points total):</em> Your write-up should be written in a full paragraph (do not reply in individual bulletpoints to the points below - this is just a checklist for you to make sure you included everything you need. A point will be deducted if your write-up is not written in a professional paragraph).</p>
 <ul>
-<li>(<strong>1 point</strong>): State whether the overall model was significant, and report F-ratio, df, and p-value in APA format.</li>
-<li>(<strong>1 point</strong>): State how much of the variance in first year GPA is explained by our model, and report R-squared.</li>
-<li>(<strong>3 points</strong>): State the significance of each predictor in the model, reporting b, SE, and p in parentheses for each predictor.</li>
+<li><p>(<strong>1 point</strong>): State whether the overall model was significant, and report F-ratio, df, and p-value in APA format.</p></li>
+<li><p>(<strong>1 point</strong>): State how much of the variance in loneliness is explained by our model, and report R-squared.</p></li>
+<li><p>(<strong>3 points</strong>): State the significance of each predictor in the model, reporting b, SE, and p in parentheses for each predictor.</p></li>
 </ul>
 </div>
 </div>
@@ -289,7 +287,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC01IiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL3NhdGdwYS5jc3YiXQ==
+WyJkYXRhLy5EU19TdG9yZSIsImRhdGEvcGVyc29uYWxpdHlfbG9uZWxpbmVzcy5jc3YiXQ==
 </script>
 </section>
 </section>
@@ -308,236 +306,243 @@ window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
         }
       }
       return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
         }
-        return container.innerHTML
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -545,185 +550,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
 
 

@@ -39,13 +39,16 @@ All questions will include a rubric so you know what information to include.
 
 Type your answers to these questions in a separate word document and upload that document to Brightspace for evaluation. There is an "answer template" document attached to the Brightspace assignment.
 
-## What predicts first year college GPA? 
+## Can personality predict loneliness? 
 
-Our data today come from a sample of data produced by Educational Testing Service, the company that administers standardized tests such as the SAT and the GRE. Many college admissions offices wonder if SAT scores predict student success in college. Is there any predictive value of knowing a student's SAT performance? If SAT scores don't predict college performance then maybe they should not be required to apply to college. We'll explore the relationship between high school grades, SAT scores, and first year college performance in today's lab on correlation and regression. 
+Earlier in the semester you took a survey that asked about personality and loneliness. We already analyzed some of the loneliness data in Homework #3, comparing our sample of UVM Psychology student loneliness to the population norms for college students collected in 1996. In this lab, we will revisit these data, this time to see if we can use the Big 5 personality traits to predict loneliness in our sample.
 
-::: {.callout-note}
-Just a note that if SAT scores DO predict college performance, it's still worth discussing whether SAT scores are an *equitable* measure of performance. There are many reasons why people criticize the SAT as way to predict student success - for example, researchers have raised concerns about socioeconomic differences in SAT performance, and others have pointed out that the SAT may be biased towards students from a particular cultural background. These are all questions that go beyond the scope of the data we'll explore in today's lab, but they are great questions to think about!
-:::
+As a reminder, these data came from these sources: 
+
+- [Ten Item Personality Measure (TIPI)](https://gosling.psy.utexas.edu/scales-weve-developed/ten-item-personality-measure-tipi/)
+
+- [UCLA Loneliness Scale (Version 3)](https://sparqtools.org/mobility-measure/ucla-loneliness-scale-version-3/ )
+
 
 ## Exploring our data
 
@@ -53,18 +56,20 @@ Let's load the dataset and see what variables we have to explore:
 
 ```{webr}
 #| edit: false
-college <- read.csv("data/satgpa.csv")
-head(college)
+lonely_data <- read.csv("data/personality_loneliness.csv")
+head(lonely_data)
 ```
 
 Our variables are: 
 
-- `sat_v`: The student's verbal SAT score.
-- `sat_m`: The student's math SAT score.
-- `hs_gpa`: The student's high school GPA
-- `fy_GPA`: The student's GPA at the end of their first year in college. This will be our outcome variable, and we will use the other variables as predictor variables. 
+- `extraversion`: A measure of how outgoing and sociable a person is.
+- `agreeableness`: A measure of how friendly and warm a person is.
+- `conscientiousness`: A measure of how diligent and organized a person is.
+- `neuroticism`: A measure of how anxious and emotionally (un)stable a person is.
+- `openness`: A measure of how open to new experiences and creative a person is. 
+- `loneliness`: A measure of how lonely a person is.
 
-We will do two analyses with these data. First, we will look for simple correlations between each of the variables. Then we will perform a standard multiple regression to see how well we can predict a student's GPA from the other variables. 
+We will do two analyses with these data. First, we will look for simple correlations between each of the variables. Then we will perform a standard multiple regression to see how well we can predict loneliness from the personality variables. 
 
 ## Question 1: Exploring simple correlations
 
@@ -73,22 +78,22 @@ Let's start by looking at the simple correlation between all of these variables.
 Click "Run Code" to see a basic correlation matrix: 
 
 ```{webr}
-cor(college)
+cor(lonely_data)
 ```
 
-The output here is called a **correlation matrix**. Notice that it is a table with all variables listed vertically and horizontally. The values in the table are all values of r (Pearson's correlation coefficient). The diagonal indicates that the correlation of every variable with itself is r = 1.00. You will also notice that each value of r is duplicated above and below this diagonal - that is, the correlation between `sat_v` and `sat_m` is r = .467, and this occurs twice in the table.
+The output here is called a **correlation matrix**. Notice that it is a table with all variables listed vertically and horizontally. The values in the table are all values of r (Pearson's correlation coefficient). The diagonal indicates that the correlation of every variable with itself is r = 1.00. You will also notice that each value of r is duplicated above and below this diagonal, because in a grid each correlation is repeated twice. 
 
 Some functions in R can create even more elaborate correlation matrices. For example, the function `ggpairs()` from the package `GGally` can create a correlation matrix that shows the correlation below the diagonal, and scatterplots above the diagonal - a lot of information packed into one graphic! 
 
 Click "run code" to see a fancier correlation matrix!
 
 ```{webr}
-ggpairs(data = college,
+ggpairs(data = lonely_data,
         lower = list(continuous = wrap("smooth", colour="blue", alpha = .2)), 
         diag = list(continuous = "blankDiag"))
 ```
 
-In this fancier correlation matrix, the diagonal is now blank (to reduce clutter and make the plot easier to read). Above the diagonal we have the Pearson Correlation Coefficient, with asterisks indicating if the relatinoship is significant (`***` means p < .001). Below the diagonal we have scatterplots to visualize the relationship. 
+In this fancier correlation matrix, the diagonal is now blank (to reduce clutter and make the plot easier to read). Above the diagonal we have the Pearson Correlation Coefficient, with asterisks indicating if the relationship is significant (`***` means p < .001). Below the diagonal we have scatterplots to visualize the relationship. 
 
 For Question 1, copy and paste this plot below, then answer the questions about the relationships depicted here. 
 
@@ -107,16 +112,16 @@ Copy and paste the fancy correlation matrix created using the R code above. Then
 
 ## Question 2: Multiple Regression
 
-Next we will use these data to conduct a standard multiple regression. Our output variable will the `fy_gpa` (a student's GPA after their first year of college). As predictor variables we will include `sat_v`, `sat_m`, and `hs_gpa`. 
+Next we will use these data to conduct a standard multiple regression. Our output variable will be `loneliness`. As predictor variables we will include all of the Big 5 personality traits (`extraversion`, `agreeableness`, `conscientiousness`, `neuroticism`, and `openness`)
 
-The function that we will use to produce a regression is `lm()` with formula notation to indicate the relationship between our outcome variable and our predictor variables. That is, our outcome variable `fy_gpa` will go on the left of the `~` symbol, and our predictor variables will go on the right (separated by a `+` sign). 
+The function that we will use to produce a regression is `lm()` with formula notation to indicate the relationship between our outcome variable and our predictor variables. That is, our outcome variable `loneliness` will go on the left of the `~` symbol, and our predictor variables will go on the right (separated by a `+` sign). 
 
 ```{webr}
-gpa_model <- lm(data = college, fy_gpa ~ sat_v + sat_m + hs_gpa)
-gpa_model
+lonely_model <- lm(data = lonely_data, loneliness ~ extraversion + agreeableness + conscientiousness + neuroticism + openness)
+lonely_model
 ```
 
-Notice that the results of our `lm()` function here show us the coefficients for the intercept and for each predictor. For question 2a, use these values to write out the full regression equation that we could use to predict first year GPA (see multiple regression slides for an example!). 
+Notice that the results of our `lm()` function here show us the coefficients for the intercept and for each predictor. For question 2a, use these values to write out the full regression equation that we could use to predict loneliness (see multiple regression slides for an example!). 
 
 
 ### Question 2a: Writing a regression equation
@@ -124,7 +129,7 @@ Notice that the results of our `lm()` function here show us the coefficients for
 
 Using the output above, write the regression equation by plugging in the correlation coefficients into the blanks below (round to 2 decimals): 
 
-predicted first year GPA = _______(verbal SAT) + _______(math SAT) + _______(high school GPA) + _______. 
+loneliness = _______extraversion + _______agreeableness + _______conscientiousness + _______neuroticism + _______openness + _______. 
 
 *Rubric for Question 2a (2 points total):*
 
@@ -135,7 +140,7 @@ predicted first year GPA = _______(verbal SAT) + _______(math SAT) + _______(hig
 The output of the linear model gives us all of the coefficients for our regression equation, but that's all the information it gives us. How can we tell our model fit, or whether the model or any individual coefficients are significant? The function `summary()` will give us all of this additional information: 
 
 ```{webr}
-summary(gpa_model)
+summary(lonely_model)
 ```
 
 Use the output above to write up a full write-up of our regression, using the rubric below and slides posted on Brightspace to make sure you are including all needed information. 
@@ -143,12 +148,15 @@ Use the output above to write up a full write-up of our regression, using the ru
 ### Question 2b: Writing up the results of a regression
 ::: {.callout-tip title="Question 2b: Writing up the results of a regression"}
 
-Use the summary output of the regression model to write up the results of our regression in APA format. 
+Use the summary output of the regression model to write up the results of our regression in APA format. Your write-up should be written in a full paragraph (do not reply in individual bulletpoints to the points below).
 
 *Rubric for Question 2b (5 points total):*
+Your write-up should be written in a full paragraph (do not reply in individual bulletpoints to the points below - this is just a checklist for you to make sure you included everything you need. A point will be deducted if your write-up is not written in a professional paragraph).
 
 - (**1 point**):  State whether the overall model was significant, and report F-ratio, df, and p-value in APA format.
-- (**1 point**): State how much of the variance in first year GPA is explained by our model, and report R-squared. 
+
+- (**1 point**): State how much of the variance in loneliness is explained by our model, and report R-squared. 
+
 - (**3 points**): State the significance of each predictor in the model, reporting b, SE, and p in parentheses for each predictor. 
 
 :::
