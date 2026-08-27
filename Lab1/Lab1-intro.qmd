@@ -340,9 +340,9 @@ This dataframe contains the following variables:
 
 ```{webr}
 #| edit: false
-math_anxiety <- read.csv("data/math_anxiety.csv")
+anxiety_data <- read.csv("data/math_anxiety.csv")
 
-head(math_anxiety)
+head(anxiety_data)
 ```
 
 Based on the information above, answer Question 3a below (remember to type into a separate document). 
@@ -365,7 +365,7 @@ This question does not require R, it's just good practice to review scales of me
 ::: {.callout-tip title="Question 3b: Operations on variables"}
 For Question 3b, use the code block below to answer the following questions. For this question you don't need to copy your R code, you just need to report the output!
 
-What is the mean age for participants in the math_anxiety data? Report your answer using a *complete sentence* including units (e.g., "The mean age of participants is _____ years.")
+What is the mean age for participants in the `anxiety_data` dataframe? Report your answer using a *complete sentence* including units (e.g., "The mean age of participants is _____ years.")
 
 *Rubric for Question 3b (2 points total):*
 
@@ -388,7 +388,7 @@ What is the mean age for participants in the math_anxiety data? Report your answ
 
 Remember, the function to calculate mean is `mean()` and the operator to identify a specific variable in a dataset is `$`. 
 
-If you are stuck, review the student_data example above. If you are getting an error, review your work for typos! Remember that capitalization matters in R!
+If you are stuck, review the `student_data` example above, and try to do the same thing here with `anxiety_data`. If you are getting an error, review your work for typos! Remember that capitalization matters in R!
 
 :::
 ::::
@@ -400,7 +400,7 @@ If you are stuck, review the student_data example above. If you are getting an e
 Copy/paste this code below the existing code in the exercise. 
 
 ``` r
-mean(math_anxiety$age)
+mean(anxiety_data$age)
 ```
 
 Remember to press the "run code" button to get the answer!
@@ -408,12 +408,12 @@ Remember to press the "run code" button to get the answer!
 ::::
 
 ::: {.callout-tip title="Question 3c: Histograms of data"}
-For Question 3c, use the code block below to create a histogram of the math anxiety scores. For this question you don't need to copy your R code, you just need to copy/paste your histogram into your answer key!
+For Question 3c, use the code block below to create a histogram of the math anxiety scores. A histogram is a plot that shows all possible values of a variable on the x-axis, and the frequency of those variables on the y-axis. For this question you don't need to copy your R code, you just need to copy/paste your histogram into your answer key!
 
 *Rubric for Question 3c (2 points total):*
 
 -   1 pt: Present a histogram that shows the frequency of different math anxiety scores. Your histogram should be neatly copy/pasted (if you take a screenshot, crop the image so that only the histogram appears and resize it to be legible in your final document) - if it is illegible or sloppy .5 points will be deducted. 
--   1 pt: Based on your histogram, what appears to be the most common math anxiety score in this data set?
+-   1 pt: Based on your histogram, what appears to be the most common math anxiety score in this data set? 
 :::
 
 
@@ -443,7 +443,7 @@ If you are stuck, review the student_data example above. If you are getting an e
 Copy/paste this code below the existing code in the exercise. 
 
 ``` r
-hist(math_anxiety$math_anxiety)
+hist(anxiety_data$math_anxiety)
 ```
 
 Remember to press the "run code" button to get the answer!
