@@ -61,13 +61,21 @@ head(lonely_data)
 ```
 
 Our variables are: 
+
 -  `ID`: An identifier for each participant.
+
 - `extraversion`: A measure of how outgoing and sociable a person is.
+
 - `agreeableness`: A measure of how friendly and warm a person is.
+
 - `conscientiousness`: A measure of how diligent and organized a person is.
+
 - `neuroticism`: A measure of emotionally stable a person is. This particular scale is coded so that high values indicate emotional stability, low values indicate neuroticism.
-- `openness`: A measure of how open to new experiences and creative a person is. 
+
+- `openness`: A measure of how open to new experiences and creative a person is.
+
 - `loneliness`: A measure of how lonely a person is.
+
 
 We will do two analyses with these data. First, we will look for simple correlations between each of the variables. Then we will perform a standard multiple regression to see how well we can predict loneliness from the personality variables. 
 
