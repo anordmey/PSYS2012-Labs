@@ -61,11 +61,11 @@ head(lonely_data)
 ```
 
 Our variables are: 
-
+-  `ID`: An identifier for each participant.
 - `extraversion`: A measure of how outgoing and sociable a person is.
 - `agreeableness`: A measure of how friendly and warm a person is.
 - `conscientiousness`: A measure of how diligent and organized a person is.
-- `neuroticism`: A measure of how anxious and emotionally (un)stable a person is.
+- `neuroticism`: A measure of emotionally stable a person is. This particular scale is coded so that high values indicate emotional stability, low values indicate neuroticism.
 - `openness`: A measure of how open to new experiences and creative a person is. 
 - `loneliness`: A measure of how lonely a person is.
 
@@ -78,7 +78,7 @@ Let's start by looking at the simple correlation between all of these variables.
 Click "Run Code" to see a basic correlation matrix: 
 
 ```{webr}
-cor(lonely_data)
+cor(subset(lonely_data, select = -ID)) #the function subset here is helping us to remove the ID column, which we do not include in the correlation table.
 ```
 
 The output here is called a **correlation matrix**. Notice that it is a table with all variables listed vertically and horizontally. The values in the table are all values of r (Pearson's correlation coefficient). The diagonal indicates that the correlation of every variable with itself is r = 1.00. You will also notice that each value of r is duplicated above and below this diagonal, because in a grid each correlation is repeated twice. 
@@ -88,7 +88,7 @@ Some functions in R can create even more elaborate correlation matrices. For exa
 Click "run code" to see a fancier correlation matrix!
 
 ```{webr}
-ggpairs(data = lonely_data,
+ggpairs(data = subset(lonely_data, select = -ID),
         lower = list(continuous = wrap("smooth", colour="blue", alpha = .2)), 
         diag = list(continuous = "blankDiag"))
 ```
