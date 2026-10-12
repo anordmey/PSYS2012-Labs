@@ -8,6 +8,7 @@ webr:
     - dplyr 
     - tidyr
     - ggplot2
+    - rstatix
 toc: true
 engine: knitr
 
@@ -85,6 +86,11 @@ Finally, in the in the third and fourth rows we will use the function `summarize
 Click "Run code" to see the descriptive statistics!
 
 ```{webr}
+# In the code below I use a technique called "piping", using the |> symbol
+# When piping, you start with an object (in this case the demo1 data)
+# The pipe symbol |> allows you to perform multiple operations on the data.
+# Below, you can see that first I group the data by condition, then I create
+# a summary table calculating the mean and sd for eahc group.
 demo1_descriptives <- demo1 |> 
   group_by(condition) |>
   summarize(mean_words = mean(words), 
@@ -103,11 +109,19 @@ The function `t.test()` needs to know what data we are using (we'll specify this
 
 For the independent measures t-test, we will use "formula notation" to tell R how to interpret the variables. R uses the symbol `~` to indicate the relationship between different types of variables in a formula. The dependent variable or outcome variable (in this case, `words`, which is the # of words participants remembered) goes on the left side of the `~` and the independent variable or predictor variable goes on the right side (in this case, that's `condition`, which tells us whether a participant was in the shallow or deep condition). So our "formula" here will be `words ~ condition`. 
 
+After conducting the t-test, I use a function called `cohens_d` from the `rstatix` package to calculate cohen's d.
 
-See how I do this below. Then click "run code" to see the results of the t-test!
+
+See how I do this below. Then click "run code" to see the results of the t-test and effect size!
 
 ```{webr}
+# First conduct the t-test
 t.test(words ~ condition, data = demo1, var.equal = T) #var.equal = T means the assumption of equal variances has been met
+
+# Also calculate effect size using the function cohens_d. 
+# Note that this function also uses the "piping" technique described above.
+demo1 |>
+  cohens_d(words ~ condition)
 ```
 
 If you look at the results of the t-test, you see many important pieces of information: 
@@ -117,6 +131,14 @@ If you look at the results of the t-test, you see many important pieces of infor
 - The line below that, R helpfully tells you what your alternative hypothesis is - this helps us identify that a two-tailed test was run (this is the default in R)
 - Below that, it tells you the 95% Confidence Interval. Remember to report these in square brackets: [,]
 - Finally it tells you the sample means. Note that the sample means are the same as we collected earlier! The only difference is that R rounded the means at a different point in the table we made earlier. When you report means, round to 2 decimal places as R reported in our table of descriptive statistics. 
+
+Below the t-test results you see the results of the `cohens_d` function. This produces a table with more information than just Cohen's d: 
+
+- `y` tells you what the dependent variable was
+- `group1` and `group2` tell you the groups/conditions. 
+- `effsize` tells you the effect size, Cohen's d
+- `n1` and `n2` tells you the sample size of each group. Remember that sample size does not actually impact effect size - they are reporting this here as additional information. 
+- `magnitude` helpfully tells you how to interpret the effect size!
 
 Now we have all of the information we need to write a formal APA style write-up. 
 
@@ -135,7 +157,7 @@ For question 1 of the homework, you should use all of the R output from the code
 -  Identify the type of t-test conducted (I will accept "independent measures" or "two sample" here - in general, if R labels a test using a different name than we've been using, I'll accept either Rs version or the name we've called it in class). 
 - State (briefly) what was measured and whether we found a significant or not significant difference. 
 - Report the descriptive statistics (mean and standard deviation) in parentheses using APA style notation (M=, SD=), rounding to 2 decimal places. Make sure you use subscripts or labels to make it clear which group you are referring to when you report descriptive statistics!
-- Report (either in parentheses or at the end of the sentence) the following statistics **in APA format**: t, df, p, 95% confidence interval, rounding all values to 2 decimal places. Review slides/notes from class if you are not sure how to report these in APA format! (or google it! There's a lot of good resources for reporting statistics in APA format online - just make sure you are specifying APA format in your search)
+- Report (either in parentheses or at the end of the sentence) the following statistics **in APA format**: t, df, p, d, 95% confidence interval, rounding all values to 2 decimal places. Review slides/notes from class if you are not sure how to report these in APA format! (or google it! There's a lot of good resources for reporting statistics in APA format online - just make sure you are specifying APA format in your search)
 
 :::
 ## Question 2: Replication of Paivio, Smythe, & Yuille (1968) 
@@ -153,20 +175,28 @@ demo2 <- read.csv("data/paivo.csv")
 head(demo2)
 ``` 
 
-Note that these data are arranged in a different format - now there is a separate column for each condition (one column for the `concrete` words remembered, and one column for the `abstract` words remembered). This is a common format for paired data, because each row represents a single participant, and the concrete and abstract values are "paired" on each row. 
+Note that the `demo2` data are arranged in a different format - now there is a separate column for each condition (one column for the `concrete` words remembered, and one column for the `abstract` words remembered). This is a common format for paired data, because each row represents a single participant, and the concrete and abstract values are "paired" on each row. 
+
+Some R functions require data to be in "long" format (sometimes called "tidy data"). In the "long" or "tidy" version, the data look the same as in the first demo, with a column indicating the condition and a column indicating the words remembered for that condition; each ID number occurs twice, marking the data as paired. 
+
+```{webr}
+#| edit: false 
+# Reshape data to "tidy" or "long form 
+# which is required for functions like ggplot and cohens_d
+# We'll continue to use the original data to conduct the t-test
+demo2_long <- demo2 |>
+  pivot_longer(cols = !id, 
+               names_to = "condition", 
+               values_to = "words")
+head(demo2_long)
+``` 
+Note that in the code above I create this long data for use in certain functions. The datasets are identical, just presented in different formats! You'll see me use both below.
 
 Once again we will start by plotting our data. We will plot the mean of each condition, with 95% confidence intervals around the mean (like in the earlier graph). Note that the code here is a little different - I start by reshaping the data into a format that `ggplot2` prefers, with each column representing a single variable and each row representing a single observation. This is often referred to as `long` or `tidy` data. 
 
 Like before, you can just click "run code" to get the plot here. Looking at the plot, what do you expect our sample means for each group to be? Do you expect us to find a significant difference between conditions?
 
 ```{webr}
-#Reshape data to "tidy" form for ggplot
-#We'll continue to use the original data to conduct the t-test
-demo2_long <- demo2 |>
-  pivot_longer(cols = !id, 
-               names_to = "condition", 
-               values_to = "words")
-
 ggplot(data = demo2_long, aes(x = condition, y = words)) +  
        geom_bar(stat = "summary", fun="mean") + 
        geom_errorbar(stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96), width=0) + 
@@ -226,6 +256,9 @@ See how I do this below, and click "Run Code" to see the output of our t-test!
 
 ```{webr}
 t.test(demo2$concrete, demo2$abstract, paired = T)
+
+demo2_long |>
+  cohens_d(words ~ condition, paired = TRUE)
 ```
 
 Looking at the output, you can see the following information: 
@@ -235,6 +268,14 @@ Looking at the output, you can see the following information:
 - R identifies the alternative hypothesis, which tells us that we are doing a two-tailed t-test
 - The 95% confidence interval is reported
 - The mean of the difference scores is reported, which is what R is actually using to calculate the t-test (remember that for a paired samples t-test, the comparison distribution is actually the sampling distribution of mean difference scores). You don't need to report this in your write-up, although you will see some people report this in journals.
+
+Below the t-test results you see the results of the `cohens_d` function. This produces a table with more information than just Cohen's d: 
+
+- `y` tells you what the dependent variable was
+- `group1` and `group2` tell you the conditions. 
+- `effsize` tells you the effect size, Cohen's d
+- `n1` and `n2` tells you the sample size for each condition. They are the same because there is actually only one sample, as this is a paired t-test. 
+- `magnitude` helpfully tells you how to interpret the effect size!
 
 ### Homework Question #2: APA style write up
 
@@ -251,5 +292,5 @@ For question 2 of the homework, as you did for question 1, you should use all of
 -  Identify the type of t-test conducted (I will accept "independent measures" or "two sample" here - in general, if R labels a test using a different name than we've been using, I'll accept either Rs version or the name we've called it in class). 
 - State (briefly) what was measured and whether we found a significant or not significant difference. 
 - Report the descriptive statistics (mean and standard deviation) in parentheses using APA style notation (M=, SD=), rounding to 2 decimal places. Make sure you use subscripts or labels to make it clear which group you are referring to when you report descriptive statistics!
-- Report (either in parentheses or at the end of the sentence) the following statistics **in APA format**: t, df, p, 95% confidence interval, rounding all values to 2 decimal places. Review slides/notes from class if you are not sure how to report these in APA format! (or google it! There's a lot of good resources for reporting statistics in APA format online - just make sure you are specifying APA format in your search)
+- Report (either in parentheses or at the end of the sentence) the following statistics **in APA format**: t, df, p, d, 95% confidence interval, rounding all values to 2 decimal places. Review slides/notes from class if you are not sure how to report these in APA format! (or google it! There's a lot of good resources for reporting statistics in APA format online - just make sure you are specifying APA format in your search)
 
