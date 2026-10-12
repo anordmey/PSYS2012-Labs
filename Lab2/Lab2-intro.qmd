@@ -222,7 +222,7 @@ For this question, you will follow the same steps as the question above to calcu
 
 What is the mean IQ for long coma patients? Use the code block below to answer this question!
 
-As a reminder, long coma patients are patients with a coma that lasted 7 days or longer and their data can be found in the dataframe `long_data`. The column that records patient IQ is labelled `peak_viq`. See what I did above with the short coma data if you need a hint - just make sure you use the long data in your version!
+As a reminder, long coma patients are patients with a coma that lasted 7 days or longer and their data can be found in the dataframe `long_coma`. The column that records patient IQ is labelled `peak_viq`. See what I did above with the short coma data if you need a hint - just make sure you use the long data in your version!
 
 
 *Rubric for Question 1a (1 point total):*
@@ -277,7 +277,7 @@ How many participants are in this dataset? Use the code block below to find N!
 *Rubric for Question 1b (1 points total):*
 
 -   .5 pt: Copy the R code that you used to answer this question.
--   .5 pt: How many patients are in the long_data dataset? 
+-   .5 pt: How many patients are in the long_coma dataset? 
 
 :::
 
